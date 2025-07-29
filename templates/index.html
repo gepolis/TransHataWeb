@@ -21,6 +21,8 @@
             --accent-dark: #5649b9;
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             --border: rgba(106, 90, 205, 0.15);
+            --x-color: #ff6b6b; /* Цвет крестика */
+            --o-color: #4ecdc4; /* Цвет нолика */
         }
 
         body {
@@ -544,6 +546,132 @@
             gap: 12px;
         }
 
+        /* Game Section */
+        .game-section {
+            background: var(--darker);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .game-subtitle {
+            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto 30px;
+            background: rgba(106, 90, 205, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(20, 20, 30, 0.5);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cell:hover {
+            background: rgba(106, 90, 205, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .cell.x::before, .cell.x::after {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 10px;
+            background: var(--x-color);
+            border-radius: 5px;
+        }
+
+        .cell.x::before {
+            transform: rotate(45deg);
+        }
+
+        .cell.x::after {
+            transform: rotate(-45deg);
+        }
+
+        .cell.o::before {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            border: 10px solid var(--o-color);
+            border-radius: 50%;
+        }
+
+        .game-info {
+            font-size: 1.3rem;
+            margin-bottom: 25px;
+            min-height: 40px;
+            color: var(--light);
+        }
+
+        .reset-button {
+            padding: 12px 35px;
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .reset-button:hover {
+            background: rgba(106, 90, 205, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.2);
+        }
+
+        .game-message {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 20px;
+            min-height: 40px;
+            color: var(--accent);
+        }
+
         /* Footer */
         footer {
             background: var(--darker);
@@ -704,6 +832,10 @@
             .section-title:after {
                 display: none;
             }
+
+            .game-title {
+                font-size: 2rem;
+            }
         }
 
         @media (max-width: 576px) {
@@ -717,6 +849,10 @@
 
             .floating {
                 font-size: 6rem;
+            }
+
+            .game-board {
+                max-width: 300px;
             }
         }
     </style>
@@ -738,6 +874,7 @@
                 <a href="#skills">Навыки</a>
                 <a href="#music">Музыка</a>
                 <a href="#projects">Проекты</a>
+                <a href="#game">Игра</a>
             </nav>
         </div>
     </header>
@@ -947,6 +1084,39 @@
         </div>
     </section>
 
+    <!-- Game Section -->
+    <section id="game" class="game-section">
+        <div class="container">
+            <div class="game-container">
+                <h2 class="game-title">
+                    <i class="fas fa-gamepad"></i> Отдохни - сыграй в игру!
+                </h2>
+                <p class="game-subtitle">
+                    Сыграй со мной в крестики-нолики! Ты играешь за крестики (X), а я за нолики (O).
+                    Попробуй обыграть меня!
+                </p>
+
+                <div class="game-info" id="game-info">Твой ход! Кликай на ячейку</div>
+                <div class="game-board" id="game-board">
+                    <div class="cell" data-index="0"></div>
+                    <div class="cell" data-index="1"></div>
+                    <div class="cell" data-index="2"></div>
+                    <div class="cell" data-index="3"></div>
+                    <div class="cell" data-index="4"></div>
+                    <div class="cell" data-index="5"></div>
+                    <div class="cell" data-index="6"></div>
+                    <div class="cell" data-index="7"></div>
+                    <div class="cell" data-index="8"></div>
+                </div>
+
+                <div class="game-message" id="game-message"></div>
+                <button class="reset-button" id="reset-button">
+                    <i class="fas fa-redo"></i> Начать заново
+                </button>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer id="contact">
         <div class="container">
@@ -1006,39 +1176,216 @@
         </div>
     </footer>
 
-    <script>
-        // Smooth scrolling
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
+<script>
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
 
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    window.scrollTo({
-                        top: target.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-
-        // Header effect
-        window.addEventListener('scroll', () => {
-            const header = document.getElementById('header');
-            if (window.scrollY > 50) {
-                header.style.background = 'rgba(10, 10, 15, 0.98)';
-                header.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.2)';
-            } else {
-                header.style.background = 'rgba(10, 10, 15, 0.92)';
-                header.style.boxShadow = 'none';
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                window.scrollTo({
+                    top: target.offsetTop - 80,
+                    behavior: 'smooth'
+                });
             }
         });
+    });
 
-        // Floating elements animation
-        const floatingElements = document.querySelectorAll('.floating');
-        floatingElements.forEach(el => {
-            el.style.animationDelay = `${Math.random() * 5}s`;
+    // Header effect
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.style.background = 'rgba(10, 10, 15, 0.98)';
+            header.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.2)';
+        } else {
+            header.style.background = 'rgba(10, 10, 15, 0.92)';
+            header.style.boxShadow = 'none';
+        }
+    });
+
+    // Floating elements animation
+    const floatingElements = document.querySelectorAll('.floating');
+    floatingElements.forEach(el => {
+        el.style.animationDelay = `${Math.random() * 5}s`;
+    });
+
+    // Tic Tac Toe Game Logic
+    const gameBoard = document.getElementById('game-board');
+    const gameInfo = document.getElementById('game-info');
+    const gameMessage = document.getElementById('game-message');
+    const resetButton = document.getElementById('reset-button');
+    const cells = document.querySelectorAll('.cell');
+
+    let currentPlayer = 'X'; // Player is X, bot is O
+    let gameActive = true;
+    let gameState = ['', '', '', '', '', '', '', '', ''];
+
+    // Winning conditions
+    const winConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+        [0, 4, 8], [2, 4, 6]             // diagonals
+    ];
+
+    // Player makes a move
+    function handleCellClick(e) {
+        const cell = e.target;
+        const index = parseInt(cell.getAttribute('data-index'));
+
+        // Check if cell is empty and game is active
+        if (gameState[index] !== '' || !gameActive) return;
+
+        // Make player move
+        makeMove(index, currentPlayer);
+
+        // Проверяем, не создал ли игрок выигрышную ситуацию для себя
+        const playerCanWin = checkImmediateWin('X');
+        if (playerCanWin !== -1) {
+            // Отменяем ход игрока
+            gameState[index] = '';
+            cell.classList.remove('x');
+
+            // Ставим выигрышный нолик
+            makeMove(playerCanWin, 'O');
+            gameMessage.textContent = 'НИ!';
+            return;
+        }
+
+        // Если не было угрозы, бот делает обычный ход
+        if (gameActive) {
+            setTimeout(makeBotMove, 500);
+        }
+    }
+
+    // Проверка, может ли игрок выиграть следующим ходом
+    function checkImmediateWin(player) {
+        for (let i = 0; i < winConditions.length; i++) {
+            const [a, b, c] = winConditions[i];
+
+            // Проверяем все комбинации, где две клетки заняты игроком и одна пуста
+            if (gameState[a] === player && gameState[b] === player && gameState[c] === '') return c;
+            if (gameState[a] === player && gameState[c] === player && gameState[b] === '') return b;
+            if (gameState[b] === player && gameState[c] === player && gameState[a] === '') return a;
+        }
+        return -1;
+    }
+
+    // Make a move
+    function makeMove(index, player) {
+        gameState[index] = player;
+        cells[index].classList.add(player.toLowerCase());
+
+        // Check for win or draw
+        const win = checkWin();
+        const draw = checkDraw();
+
+        if (win) {
+            endGame(false);
+            gameMessage.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Я выиграл! 😎';
+        } else if (draw) {
+            endGame(false);
+            gameMessage.textContent = 'Ничья! 🤝';
+        } else {
+            // Switch player
+            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            gameInfo.textContent = currentPlayer === 'X' ? 'Твой ход!' : 'Мой ход...';
+        }
+    }
+
+    // Bot makes a move
+    function makeBotMove() {
+        if (!gameActive) return;
+
+        // Find best move - simple AI
+        let bestMove = findBestMove();
+
+        // If no best move found, choose random
+        if (bestMove === -1) {
+            let emptyCells = gameState.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+            if (emptyCells.length > 0) {
+                bestMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+            }
+        }
+
+        // Make bot move
+        if (bestMove !== -1) {
+            makeMove(bestMove, 'O');
+        }
+    }
+
+    // Simple AI to find best move
+    function findBestMove() {
+        // Try to win
+        for (let i = 0; i < winConditions.length; i++) {
+            const [a, b, c] = winConditions[i];
+            if (gameState[a] === 'O' && gameState[b] === 'O' && gameState[c] === '') return c;
+            if (gameState[a] === 'O' && gameState[c] === 'O' && gameState[b] === '') return b;
+            if (gameState[b] === 'O' && gameState[c] === 'O' && gameState[a] === '') return a;
+        }
+
+        // Block player win
+        for (let i = 0; i < winConditions.length; i++) {
+            const [a, b, c] = winConditions[i];
+            if (gameState[a] === 'X' && gameState[b] === 'X' && gameState[c] === '') return c;
+            if (gameState[a] === 'X' && gameState[c] === 'X' && gameState[b] === '') return b;
+            if (gameState[b] === 'X' && gameState[c] === 'X' && gameState[a] === '') return a;
+        }
+
+        // Take center if available
+        if (gameState[4] === '') return 4;
+
+        // Take corner if available
+        const corners = [0, 2, 6, 8];
+        const availableCorners = corners.filter(index => gameState[index] === '');
+        if (availableCorners.length > 0) {
+            return availableCorners[Math.floor(Math.random() * availableCorners.length)];
+        }
+
+        // Otherwise, no best move found
+        return -1;
+    }
+
+    // Check for win
+    function checkWin() {
+        for (let i = 0; i < winConditions.length; i++) {
+            const [a, b, c] = winConditions[i];
+            if (gameState[a] !== '' &&
+                gameState[a] === gameState[b] &&
+                gameState[a] === gameState[c]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Check for draw
+    function checkDraw() {
+        return !gameState.includes('');
+    }
+
+    // End the game
+    function endGame(draw) {
+        gameActive = false;
+    }
+
+    // Reset the game
+    function resetGame() {
+        currentPlayer = 'X';
+        gameActive = true;
+        gameState = ['', '', '', '', '', '', '', '', ''];
+        gameInfo.textContent = 'Твой ход! Кликай на ячейку';
+        gameMessage.textContent = '';
+
+        // Clear cells
+        cells.forEach(cell => {
+            cell.classList.remove('x', 'o');
         });
-    </script>
+    }
+
+    // Event listeners
+    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+    resetButton.addEventListener('click', resetGame);
+</script>
 </body>
 </html>
