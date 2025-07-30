@@ -11,28 +11,58 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s, color 0.3s;
         }
 
         :root {
+            /* Светлая розовая тема */
+            --light-bg: #fff5f7;
+            --light-accent: #ff85a2;
+            --light-accent-dark: #e76d8a;
+            --light-text: #5a3d4d;
+            --light-border: rgba(255, 133, 162, 0.2);
+            --light-card: #ffffff;
+            --light-shadow: rgba(255, 133, 162, 0.1);
+
+            /* Темная тема */
             --dark-bg: #0a0a0f;
             --darker: #05050a;
-            --light: #f0f0f5;
-            --accent: #6a5acd; /* Слегка измененный акцентный цвет */
-            --accent-dark: #5649b9;
+            --dark-text: #f0f0f5;
+            --dark-accent: #6a5acd;
+            --dark-accent-dark: #5649b9;
+            --dark-border: rgba(106, 90, 205, 0.15);
+            --dark-card: rgba(20, 20, 30, 0.3);
+
+            /* Общие */
+            --x-color: #ff6b6b;
+            --o-color: #4ecdc4;
             --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            --border: rgba(106, 90, 205, 0.15);
-            --x-color: #ff6b6b; /* Цвет крестика */
-            --o-color: #4ecdc4; /* Цвет нолика */
+
+            /* Текущие переменные */
+            --bg: var(--light-bg);
+            --text: var(--light-text);
+            --accent: var(--light-accent);
+            --accent-dark: var(--light-accent-dark);
+            --border: var(--light-border);
+            --card: var(--light-card);
+            --shadow: var(--light-shadow);
+        }
+
+        body.dark-mode {
+            --bg: var(--dark-bg);
+            --text: var(--dark-text);
+            --accent: var(--dark-accent);
+            --accent-dark: var(--dark-accent-dark);
+            --border: var(--dark-border);
+            --card: var(--dark-card);
+            --shadow: rgba(0, 0, 0, 0.2);
         }
 
         body {
-            background-color: var(--dark-bg);
-            color: var(--light);
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.7;
             overflow-x: hidden;
-            background-image:
-                radial-gradient(circle at 10% 20%, rgba(106, 90, 205, 0.03) 0%, transparent 25%),
-                radial-gradient(circle at 90% 80%, rgba(106, 90, 205, 0.03) 0%, transparent 25%);
             min-height: 100vh;
         }
 
@@ -49,10 +79,14 @@
             width: 100%;
             z-index: 1000;
             padding: 25px 0;
-            background: rgba(10, 10, 15, 0.92);
+            background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
             transition: var(--transition);
+        }
+
+        body.dark-mode header {
+            background: rgba(10, 10, 15, 0.92);
         }
 
         .header-container {
@@ -65,7 +99,7 @@
             font-size: 1.8rem;
             font-weight: 700;
             letter-spacing: 1px;
-            color: var(--light);
+            color: var(--text);
             position: relative;
             display: flex;
             align-items: center;
@@ -78,7 +112,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             border-radius: 50%;
             color: var(--accent);
         }
@@ -89,7 +123,8 @@
         }
 
         .nav-links a {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text);
+            opacity: 0.8;
             text-decoration: none;
             font-size: 1rem;
             letter-spacing: 1px;
@@ -111,11 +146,26 @@
         }
 
         .nav-links a:hover {
-            color: var(--light);
+            opacity: 1;
         }
 
         .nav-links a:hover:after {
             width: 100%;
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-left: 20px;
+            transition: var(--transition);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg) scale(1.2);
+            color: var(--accent);
         }
 
         /* Hero Section */
@@ -126,10 +176,11 @@
             position: relative;
             overflow: hidden;
             padding-top: 80px;
+            background-size: 200px;
         }
 
+
         .hero-content {
-            max-width: 800px;
             max-width: 800px;
             position: relative;
             z-index: 2;
@@ -151,7 +202,7 @@
             line-height: 1.1;
             margin-bottom: 30px;
             letter-spacing: -1px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .hero-highlight {
@@ -163,14 +214,14 @@
         .hero-text {
             font-size: 1.2rem;
             margin-bottom: 40px;
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             max-width: 600px;
             line-height: 1.8;
             font-weight: 300;
         }
 
         .skills-section {
-            background: rgba(106, 90, 205, 0.08);
+            background: rgba(var(--accent-rgb), 0.08);
             border: 1px solid var(--border);
             padding: 30px;
             border-radius: 15px;
@@ -230,11 +281,11 @@
         .skill-name {
             font-size: 1.1rem;
             margin-bottom: 10px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .skill-description {
-            color: rgba(255, 255, 255, 0.6);
+            opacity: 0.8;
             font-size: 0.95rem;
         }
 
@@ -255,9 +306,9 @@
         }
 
         .cta-button:hover {
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(106, 90, 205, 0.15);
+            box-shadow: 0 10px 25px var(--shadow);
         }
 
         /* Sections */
@@ -270,7 +321,7 @@
             font-size: 2.5rem;
             margin-bottom: 80px;
             position: relative;
-            color: var(--light);
+            color: var(--text);
             font-weight: 700;
             display: flex;
             align-items: center;
@@ -301,12 +352,12 @@
 
         .about-text h3 {
             font-size: 1.8rem;
-            color: var(--light);
+            color: var(--text);
             font-weight: 600;
         }
 
         .about-text p {
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             font-size: 1.1rem;
             line-height: 1.8;
         }
@@ -320,22 +371,21 @@
 
         .skill {
             padding: 8px 18px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(var(--accent-rgb), 0.05);
             border-radius: 50px;
             font-size: 0.9rem;
             transition: var(--transition);
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text);
             border: 1px solid var(--border);
         }
 
         .skill:hover {
-            background: rgba(106, 90, 205, 0.1);
-            color: var(--light);
+            background: rgba(var(--accent-rgb), 0.1);
             transform: translateY(-3px);
         }
 
         .about-image {
-            background: rgba(20, 20, 30, 0.3);
+            background: var(--card);
             border: 1px solid var(--border);
             height: 100%;
             min-height: 400px;
@@ -354,7 +404,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(106, 90, 205, 0.05));
+            background: linear-gradient(45deg, transparent, rgba(var(--accent-rgb), 0.05));
         }
 
         .about-image-content {
@@ -366,11 +416,11 @@
         .about-image-content h3 {
             font-size: 2rem;
             margin-bottom: 20px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .about-image-content p {
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             max-width: 300px;
             margin: 0 auto;
             line-height: 1.8;
@@ -378,20 +428,9 @@
 
         /* Music Section */
         .music-section {
-            background: var(--darker);
+            background: var(--card);
             position: relative;
             overflow: hidden;
-        }
-
-        .music-section:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, rgba(106, 90, 205, 0.03) 0%, transparent 70%);
-            z-index: -1;
         }
 
         .artists-grid {
@@ -401,13 +440,15 @@
         }
 
         .artist-card {
-            background: rgba(20, 20, 30, 0.3);
+            background: var(--card);
             border: 1px solid var(--border);
             padding: 30px;
             border-radius: 15px;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
+            cursor: pointer;
         }
 
         .artist-card:before {
@@ -423,7 +464,7 @@
 
         .artist-card:hover {
             transform: translateY(-10px);
-            background: rgba(30, 30, 40, 0.4);
+            box-shadow: 0 15px 30px var(--shadow);
         }
 
         .artist-card:hover:before {
@@ -433,7 +474,7 @@
         .artist-icon {
             width: 60px;
             height: 60px;
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -441,16 +482,17 @@
             margin-bottom: 25px;
             font-size: 1.5rem;
             color: var(--accent);
+            transition: var(--transition);
         }
 
         .artist-name {
             font-size: 1.4rem;
             margin-bottom: 10px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .artist-genre {
-            color: rgba(255, 255, 255, 0.6);
+            opacity: 0.8;
             font-size: 1rem;
             margin-bottom: 20px;
             display: block;
@@ -458,7 +500,7 @@
 
         .artist-quote {
             font-style: italic;
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             line-height: 1.8;
             margin-bottom: 25px;
             font-size: 0.95rem;
@@ -466,7 +508,7 @@
 
         /* Projects Section */
         .projects-section {
-            background: rgba(15, 15, 25, 0.6);
+            background: var(--card);
         }
 
         .projects-grid {
@@ -476,13 +518,14 @@
         }
 
         .project-card {
-            background: rgba(20, 20, 30, 0.3);
+            background: var(--card);
             border: 1px solid var(--border);
             padding: 40px;
             border-radius: 15px;
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow);
         }
 
         .project-card:before {
@@ -498,7 +541,7 @@
 
         .project-card:hover {
             transform: translateY(-10px);
-            background: rgba(30, 30, 40, 0.4);
+            box-shadow: 0 15px 30px var(--shadow);
         }
 
         .project-card:hover:before {
@@ -508,7 +551,7 @@
         .project-title {
             font-size: 1.5rem;
             margin-bottom: 15px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .project-tech {
@@ -521,13 +564,13 @@
         .tech-item {
             font-size: 0.85rem;
             color: var(--accent);
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             padding: 5px 15px;
             border-radius: 50px;
         }
 
         .project-description {
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             margin-bottom: 25px;
             line-height: 1.8;
         }
@@ -548,7 +591,7 @@
 
         /* Game Section */
         .game-section {
-            background: var(--darker);
+            background: var(--card);
             padding: 100px 0;
             position: relative;
             overflow: hidden;
@@ -563,16 +606,15 @@
         .game-title {
             font-size: 2.5rem;
             margin-bottom: 20px;
-            color: var(--light);
+            color: var(--text);
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 15px;
         }
 
         .game-subtitle {
             font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             margin-bottom: 40px;
             max-width: 600px;
             margin-left: auto;
@@ -587,7 +629,7 @@
             gap: 10px;
             max-width: 400px;
             margin: 0 auto 30px;
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             padding: 20px;
             border-radius: 15px;
             border: 1px solid var(--border);
@@ -595,7 +637,7 @@
 
         .cell {
             aspect-ratio: 1;
-            background: rgba(20, 20, 30, 0.5);
+            background: var(--card);
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -605,10 +647,11 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
+            box-shadow: 0 3px 10px var(--shadow);
         }
 
         .cell:hover {
-            background: rgba(106, 90, 205, 0.2);
+            background: rgba(var(--accent-rgb), 0.2);
             transform: translateY(-3px);
         }
 
@@ -642,7 +685,7 @@
             font-size: 1.3rem;
             margin-bottom: 25px;
             min-height: 40px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .reset-button {
@@ -659,9 +702,9 @@
         }
 
         .reset-button:hover {
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(106, 90, 205, 0.2);
+            box-shadow: 0 5px 15px var(--shadow);
         }
 
         .game-message {
@@ -674,7 +717,7 @@
 
         /* Footer */
         footer {
-            background: var(--darker);
+            background: var(--card);
             padding: 80px 0 40px;
             border-top: 1px solid var(--border);
             position: relative;
@@ -689,11 +732,11 @@
         .footer-about h3 {
             font-size: 1.8rem;
             margin-bottom: 25px;
-            color: var(--light);
+            color: var(--text);
         }
 
         .footer-about p {
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
             line-height: 1.8;
             max-width: 400px;
             margin-bottom: 30px;
@@ -708,17 +751,17 @@
             width: 45px;
             height: 45px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(var(--accent-rgb), 0.05);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text);
             transition: var(--transition);
             border: 1px solid var(--border);
         }
 
         .social-link:hover {
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             color: var(--accent);
             transform: translateY(-5px);
         }
@@ -738,7 +781,7 @@
         .contact-icon {
             width: 40px;
             height: 40px;
-            background: rgba(106, 90, 205, 0.1);
+            background: rgba(var(--accent-rgb), 0.1);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -747,11 +790,11 @@
         }
 
         .contact-text {
-            color: rgba(255, 255, 255, 0.7);
+            opacity: 0.8;
         }
 
         .contact-text a {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--text);
             text-decoration: none;
             transition: var(--transition);
         }
@@ -765,31 +808,8 @@
             padding-top: 60px;
             margin-top: 60px;
             border-top: 1px solid var(--border);
-            color: rgba(255, 255, 255, 0.5);
+            opacity: 0.7;
             font-size: 0.9rem;
-        }
-
-        /* Floating Elements */
-        .floating {
-            position: absolute;
-            opacity: 0.03;
-            color: var(--accent);
-            font-size: 10rem;
-            z-index: 1;
-            user-select: none;
-        }
-
-        .floating-1 {
-            top: 15%;
-            right: 10%;
-            animation: float 15s infinite ease-in-out;
-        }
-
-        .floating-2 {
-            bottom: 20%;
-            left: 8%;
-            animation: float 18s infinite ease-in-out;
-            animation-delay: 2s;
         }
 
         /* Animations */
@@ -797,6 +817,483 @@
             0% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-40px) rotate(10deg); }
             100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        /* New Elements */
+        .ni-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 20rem;
+            font-weight: 800;
+            color: var(--x-color);
+            opacity: 0;
+            z-index: 1001;
+            pointer-events: none;
+            text-shadow: 0 0 30px rgba(255, 107, 107, 0.7);
+            transition: none;
+        }
+
+        .ni-popup.show {
+            animation: niAnimation 1s ease-out;
+        }
+
+        @keyframes niAnimation {
+            0% {
+                transform: translate(-50%, -50%) scale(0.1);
+                opacity: 0.2;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        .fake-move {
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            border: 10px solid rgba(78, 205, 196, 0.3);
+            border-radius: 50%;
+            animation: fakeMove 0.8s ease-out;
+        }
+
+        @keyframes fakeMove {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(0.5); }
+        }
+
+        .bot-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid var(--accent);
+            border-radius: 15px;
+            padding: 15px 25px;
+            max-width: 300px;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.5s ease;
+            z-index: 1000;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .bot-message.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .bot-message-content {
+            font-size: 1.1rem;
+            line-height: 1.5;
+            color: var(--text);
+        }
+
+        .bot-message-author {
+            text-align: right;
+            margin-top: 10px;
+            color: var(--accent);
+            font-style: italic;
+        }
+
+        .onlyfans-link {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(45deg, #ff85a2, #ff6b6b);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            text-decoration: none;
+            box-shadow: 0 5px 20px rgba(255, 133, 162, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--card);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            max-width: 350px;
+            z-index: 2000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(var(--accent-rgb), 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .notification-content {
+            flex: 1;
+            font-size: 0.95rem;
+        }
+
+        .notification-close {
+            background: transparent;
+            border: none;
+            color: var(--text);
+            opacity: 0.6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 5px;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .notification-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            opacity: 1;
+        }
+
+        .notification-music {
+            border-color: #ff85a2;
+        }
+
+        .notification-music .notification-icon {
+            background: rgba(255, 133, 162, 0.1);
+            color: #ff85a2;
+        }
+
+        /* Мобильное меню */
+        #mobile-menu-toggle {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        #mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        #mobile-menu.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .mobile-menu-content {
+            background: var(--card);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        #mobile-menu.show .mobile-menu-content {
+            transform: translateY(0);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mobile-nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: block;
+        }
+
+        .mobile-menu-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--text);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Волна в хедере */
+        .header-wave {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M321.39 56.44c58-10.79 114.16-30.13 172-41.86 82.39-16.72 168.19-17.73 250.45-.39C823.78 31 906.67 72 985.66 92.83c70.05 18.48 146.53 26.09 214.34 3V0H0v27.35a600.21 600.21 0 00321.39 29.09z" fill="%23ffffff"></path></svg>');
+            background-size: 1200px 100px;
+            animation: wave 12s linear infinite;
+        }
+
+        body.dark-mode .header-wave {
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 1200 120" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none"><path d="M321.39 56.44c58-10.79 114.16-30.13 172-41.86 82.39-16.72 168.19-17.73 250.45-.39C823.78 31 906.67 72 985.66 92.83c70.05 18.48 146.53 26.09 214.34 3V0H0v27.35a600.21 600.21 0 00321.39 29.09z" fill="%230a0a0f"></path></svg>');
+        }
+
+        @keyframes wave {
+            0% { background-position-x: 0; }
+            100% { background-position-x: 1200px; }
+        }
+
+        /* Консоль для читов */
+        .cheat-console {
+            position: fixed;
+            top: 100px;
+            left: 100px;
+            width: 700px;
+            height: 450px;
+            background: rgba(10, 15, 20, 0.95);
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            border-radius: 8px;
+            border: 1px solid #3a3a6a;
+            resize: both;
+            min-width: 400px;
+            min-height: 300px;
+        }
+
+        .console-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                rgba(0, 30, 0, 0.1),
+                rgba(0, 10, 0, 0.1) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            opacity: 0.1;
+        }
+
+        .console-header {
+            background: linear-gradient(90deg, #0a0a1f, #1a1a3a);
+            padding: 10px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #3a3a6a;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            cursor: move;
+            user-select: none;
+        }
+
+        .console-title {
+            color: #6a5acd;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .console-title i {
+            color: #4ecdc4;
+        }
+
+        .console-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .console-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .console-close {
+            background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+            color: white;
+        }
+
+        .console-minimize {
+            background: linear-gradient(135deg, #f39c12, #e67e22);
+            color: white;
+        }
+
+        .console-expand {
+            background: linear-gradient(135deg, #2ecc71, #27ae60);
+            color: white;
+        }
+
+        .console-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 8px currentColor;
+        }
+
+        .console-content {
+            flex: 1;
+            padding: 15px;
+            color: #0f0;
+            overflow-y: auto;
+            font-size: 1.05rem;
+            line-height: 1.5;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .console-line {
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .console-prefix {
+            color: #4ecdc4;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .console-message {
+            flex: 1;
+            word-break: break-word;
+        }
+
+        .console-message.error {
+            color: #ff6b6b;
+        }
+
+        .console-message.success {
+            color: #2ecc71;
+        }
+
+        .console-message.warning {
+            color: #f39c12;
+        }
+
+        .console-message.info {
+            color: #3498db;
+        }
+
+        .console-input-container {
+            display: flex;
+            padding: 10px;
+            background: rgba(5, 10, 15, 0.9);
+            border-top: 1px solid #3a3a6a;
+        }
+
+        .console-prompt {
+            color: #4ecdc4;
+            margin-right: 8px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+
+        .console-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #0f0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 1.05rem;
+            outline: none;
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+        }
+
+        .console-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px 12px;
+            background: rgba(15, 20, 30, 0.8);
+            border-top: 1px solid #3a3a6a;
+        }
+
+        .suggestion {
+            background: rgba(106, 90, 205, 0.2);
+            color: #a29bfe;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .suggestion:hover {
+            background: rgba(106, 90, 205, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Угол для изменения размера */
+        .resize-handle {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background: #4ecdc4;
+            cursor: nwse-resize;
+            z-index: 10;
+            bottom: 0;
+            right: 0;
+            border-bottom-right-radius: 8px;
         }
 
         /* Responsive Design */
@@ -836,31 +1333,67 @@
             .game-title {
                 font-size: 2rem;
             }
-        }
 
-        @media (max-width: 576px) {
+            #mobile-menu-toggle {
+                display: block;
+            }
+
             .nav-links {
                 display: none;
             }
 
+            .cheat-console {
+                width: 90%;
+                height: 400px;
+                left: 5%;
+            }
+        }
+
+        @media (max-width: 576px) {
             .hero {
                 padding-top: 120px;
-            }
-
-            .floating {
-                font-size: 6rem;
             }
 
             .game-board {
                 max-width: 300px;
             }
+
+            .project-card {
+                padding: 25px;
+            }
+
+            .console-header {
+                padding: 10px 12px;
+            }
+
+            .console-content {
+                padding: 12px;
+                font-size: 0.95rem;
+            }
+
+            .console-title {
+                font-size: 1rem;
+            }
+
+            .console-btn {
+                width: 24px;
+                height: 24px;
+                font-size: 0.8rem;
+            }
+
+            .cheat-console {
+                min-width: 300px;
+                min-height: 250px;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Floating Elements -->
-    <div class="floating floating-1">❯</div>
-    <div class="floating floating-2">❯</div>
+    <!-- OnlyFans Meme Link -->
+    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" class="onlyfans-link" target="_blank" id="onlyfans-link" style="display: none">
+        <i class="fas fa-fire"></i> OnlyFans
+    </a>
 
     <!-- Header -->
     <header id="header">
@@ -876,8 +1409,29 @@
                 <a href="#projects">Проекты</a>
                 <a href="#game">Игра</a>
             </nav>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button id="mobile-menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
+        <div class="header-wave" style="display: none"></div>
     </header>
+
+    <!-- Мобильное меню -->
+    <div id="mobile-menu">
+        <div class="mobile-menu-content">
+            <nav class="mobile-nav-links">
+                <a href="#about">Обо мне</a>
+                <a href="#skills">Навыки</a>
+                <a href="#music">Музыка</a>
+                <a href="#projects">Проекты</a>
+                <a href="#game">Игра</a>
+            </nav>
+            <button class="mobile-menu-close"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -898,8 +1452,8 @@
                             <p class="skill-description">Создание современных веб-приложений и интерфейсов</p>
                         </div>
                         <div class="skill-item">
-                            <h4 class="skill-name">Lorem</h4>
-                            <p class="skill-description">Lorem lorem lorem</p>
+                            <h4 class="skill-name">Backend</h4>
+                            <p class="skill-description">Разработка серверной логики и API</p>
                         </div>
                         <div class="skill-item">
                             <h4 class="skill-name">UI/UX Дизайн</h4>
@@ -962,7 +1516,7 @@
                     <h3 class="project-title">Frontend Разработка</h3>
                     <div class="project-tech">
                         <span class="tech-item">Vue.js</span>
-                        <span class="tech-item">HTMLX</span>
+                        <span class="tech-item">HTML5/CSS3</span>
                     </div>
                     <p class="project-description">Создание современных пользовательских интерфейсов с использованием передовых технологий и лучших практик.</p>
                 </div>
@@ -1069,13 +1623,12 @@
                 </div>
 
                 <div class="project-card">
-                    <h3 class="project-title">Lorem</h3>
+                    <h3 class="project-title">Музыкальный Плейлист</h3>
                     <div class="project-tech">
-                        <span class="tech-item">Lorem</span>
-                        <span class="tech-item">Lorem</span>
-                        <span class="tech-item">Lorem</span>
+                        <span class="tech-item">JavaScript</span>
+                        <span class="tech-item">Spotify API</span>
                     </div>
-                    <p class="project-description">Lorem Lorem Lorem Lorem Lorem</p>
+                    <p class="project-description">Интерактивный плейлист с рекомендациями на основе предпочтений</p>
                     <a href="#" class="project-link">
                         Посмотреть проект <i class="fas fa-external-link-alt"></i>
                     </a>
@@ -1089,7 +1642,7 @@
         <div class="container">
             <div class="game-container">
                 <h2 class="game-title">
-                    <i class="fas fa-gamepad"></i> Отдохни - сыграй в игру!
+                    <i class="fas fa-gamepad" id="gamepad-icon"></i> Отдохни - сыграй в игру!
                 </h2>
                 <p class="game-subtitle">
                     Сыграй со мной в крестики-нолики! Ты играешь за крестики (X), а я за нолики (O).
@@ -1176,216 +1729,965 @@
         </div>
     </footer>
 
-<script>
-    // Smooth scrolling
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
+    <!-- New Elements -->
+    <div class="ni-popup" id="ni-popup">НИ!</div>
+    <div class="bot-message" id="bot-message">
+        <div class="bot-message-content" id="bot-message-content"></div>
+        <div class="bot-message-author">- Бот</div>
+    </div>
+
+    <!-- Консоль для читов -->
+    <div class="cheat-console" id="cheat-console">
+        <div class="console-overlay"></div>
+        <div class="console-header" id="console-header">
+            <div class="console-title">
+                <i class="fas fa-terminal"></i> TransHata Developer Console v2.0
+            </div>
+            <div class="console-controls">
+                <button class="console-btn console-minimize" title="Свернуть">
+                    <i class="fas fa-window-minimize"></i>
+                </button>
+                <button class="console-btn console-expand" title="Развернуть">
+                    <i class="fas fa-window-maximize"></i>
+                </button>
+                <button class="console-btn console-close" title="Закрыть">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="console-content" id="console-content">
+            <div class="console-line">
+                <span class="console-prefix">></span>
+                <span class="console-message">Добро пожаловать в консоль разработчика!</span>
+            </div>
+            <div class="console-line">
+                <span class="console-prefix">></span>
+                <span class="console-message">Введите "help" для списка доступных команд</span>
+            </div>
+        </div>
+        <div class="console-input-container">
+            <span class="console-prompt">TransHata:~$</span>
+            <input type="text" class="console-input" id="console-input" autocomplete="off" placeholder="Введите команду...">
+        </div>
+        <div class="console-suggestions" id="console-suggestions">
+            <div class="suggestion" data-command="help">help</div>
+            <div class="suggestion" data-command="enableCheats">enableCheats</div>
+            <div class="suggestion" data-command="scamDisable">scamDisable</div>
+            <div class="suggestion" data-command="godMode">godMode</div>
+            <div class="suggestion" data-command="win">win</div>
+            <div class="suggestion" data-command="reset">reset</div>
+            <div class="suggestion" data-command="clear">clear</div>
+            <div class="suggestion" data-command="time">time</div>
+            <div class="suggestion" data-command="theme">theme</div>
+            <div class="suggestion" data-command="about">about</div>
+            <div class="suggestion" data-command="exit">exit</div>
+        </div>
+        <div class="resize-handle" id="resize-handle"></div>
+    </div>
+
+    <script>
+        // ===== Константы =====
+        const themeToggle = document.getElementById('theme-toggle');
+        const body = document.body;
+        const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuClose = document.querySelector('.mobile-menu-close');
+        const gamepadIcon = document.getElementById('gamepad-icon');
+        const cheatConsole = document.getElementById('cheat-console');
+        const consoleContent = document.getElementById('console-content');
+        const consoleInput = document.getElementById('console-input');
+        const consoleClose = document.querySelector('.console-close');
+        const consoleMinimize = document.querySelector('.console-minimize');
+        const consoleExpand = document.querySelector('.console-expand');
+        const suggestions = document.querySelectorAll('.suggestion');
+        const consoleHeader = document.getElementById('console-header');
+        const resizeHandle = document.getElementById('resize-handle');
+
+        // ===== Состояние читов =====
+        let cheatsEnabled = false;
+        let scamDisabled = false;
+        let godMode = false;
+        let gamepadClickCount = 0;
+        let lastClickTime = 0;
+        let commandHistory = [];
+        let historyIndex = -1;
+
+        // ===== Состояние окна =====
+        let isDragging = false;
+        let isResizing = false;
+        let startX, startY;
+        let startWidth, startHeight;
+        let startLeft, startTop;
+        let isMaximized = false;
+        let originalPosition = { left: '100px', top: '100px', width: '700px', height: '450px' };
+
+        // ===== Системная тема =====
+        function checkSystemTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) return;
+
+            const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (systemPrefersDark) {
+                body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                body.classList.remove('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        }
+
+        const systemThemeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        systemThemeMediaQuery.addEventListener('change', (e) => {
+            if (!localStorage.getItem('theme')) {
+                if (e.matches) {
+                    body.classList.add('dark-mode');
+                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                } else {
+                    body.classList.remove('dark-mode');
+                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                }
+                updateHeader();
+            }
+        });
+
+        // ===== Переключение темы =====
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+            }
+
+            updateHeader();
+        });
+
+        // ===== Функция для обновления хедера =====
+        function updateHeader() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.style.background = body.classList.contains('dark-mode')
+                    ? 'rgba(10, 10, 15, 0.98)'
+                    : 'rgba(255, 255, 255, 0.95)';
+                header.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.1)';
+            } else {
+                header.style.background = body.classList.contains('dark-mode')
+                    ? 'rgba(10, 10, 15, 0.92)'
+                    : 'rgba(255, 255, 255, 0.9)';
+                header.style.boxShadow = 'none';
+            }
+        }
+
+        // Header effect
+        window.addEventListener('scroll', updateHeader);
+        updateHeader(); // Инициализация при загрузке
+
+        // ===== Мобильное меню =====
+        mobileMenuToggle.addEventListener('click', () => {
+            mobileMenu.classList.add('show');
+        });
+
+        mobileMenuClose.addEventListener('click', () => {
+            mobileMenu.classList.remove('show');
+        });
+
+        // ===== Smooth scrolling =====
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+
+                // Закрываем мобильное меню после клика
+                mobileMenu.classList.remove('show');
+            });
+        });
+
+        // ===== Открытие консоли при тройном клике на геймпад =====
+        gamepadIcon.addEventListener('click', () => {
+            const currentTime = new Date().getTime();
+
+            // Сброс счетчика, если прошло больше 1 секунды
+            if (currentTime - lastClickTime > 1000) {
+                gamepadClickCount = 0;
+            }
+
+            gamepadClickCount++;
+            lastClickTime = currentTime;
+
+            if (gamepadClickCount === 3) {
+                cheatConsole.style.display = 'flex';
+                consoleInput.focus();
+                gamepadClickCount = 0;
+                addToConsole('Консоль разработчика активирована!', 'success');
+
+                // Устанавливаем начальное положение
+                if (!cheatConsole.style.left) {
+                    cheatConsole.style.left = originalPosition.left;
+                    cheatConsole.style.top = originalPosition.top;
+                    cheatConsole.style.width = originalPosition.width;
+                    cheatConsole.style.height = originalPosition.height;
+                }
+            }
+        });
+
+        // ===== Обработчики для перемещения окна =====
+        consoleHeader.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.console-btn')) return;
+
+            isDragging = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startLeft = parseInt(cheatConsole.style.left || originalPosition.left);
+            startTop = parseInt(cheatConsole.style.top || originalPosition.top);
+
+            cheatConsole.style.cursor = 'grabbing';
             e.preventDefault();
+        });
 
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                window.scrollTo({
-                    top: target.offsetTop - 80,
-                    behavior: 'smooth'
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                cheatConsole.style.left = (startLeft + dx) + 'px';
+                cheatConsole.style.top = (startTop + dy) + 'px';
+            }
+
+            if (isResizing) {
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+
+                const newWidth = Math.max(400, startWidth + dx);
+                const newHeight = Math.max(300, startHeight + dy);
+
+                cheatConsole.style.width = newWidth + 'px';
+                cheatConsole.style.height = newHeight + 'px';
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (isDragging || isResizing) {
+                isDragging = false;
+                isResizing = false;
+                cheatConsole.style.cursor = 'default';
+            }
+        });
+
+        // ===== Обработчики для изменения размера =====
+        resizeHandle.addEventListener('mousedown', (e) => {
+            isResizing = true;
+            startX = e.clientX;
+            startY = e.clientY;
+            startWidth = parseInt(cheatConsole.style.width || originalPosition.width);
+            startHeight = parseInt(cheatConsole.style.height || originalPosition.height);
+
+            cheatConsole.style.cursor = 'nwse-resize';
+            e.preventDefault();
+        });
+
+        // ===== Кнопки управления окном =====
+        consoleClose.addEventListener('click', () => {
+            cheatConsole.style.display = 'none';
+        });
+
+        consoleMinimize.addEventListener('click', () => {
+            cheatConsole.style.display = 'none';
+            addToConsole('Консоль свернута. Тройной клик по иконке игры, чтобы открыть снова.', 'info');
+        });
+
+        consoleExpand.addEventListener('click', () => {
+            if (isMaximized) {
+                // Восстановить исходный размер
+                cheatConsole.style.left = originalPosition.left;
+                cheatConsole.style.top = originalPosition.top;
+                cheatConsole.style.width = originalPosition.width;
+                cheatConsole.style.height = originalPosition.height;
+                cheatConsole.style.borderRadius = '8px';
+                consoleExpand.innerHTML = '<i class="fas fa-window-maximize"></i>';
+                addToConsole('Консоль восстановлена', 'success');
+            } else {
+                // Запомнить текущее положение и размер
+                originalPosition = {
+                    left: cheatConsole.style.left,
+                    top: cheatConsole.style.top,
+                    width: cheatConsole.style.width,
+                    height: cheatConsole.style.height
+                };
+
+                // Развернуть на весь экран
+                cheatConsole.style.left = '0';
+                cheatConsole.style.top = '0';
+                cheatConsole.style.width = '100%';
+                cheatConsole.style.height = '100%';
+                cheatConsole.style.borderRadius = '0';
+                consoleExpand.innerHTML = '<i class="fas fa-window-restore"></i>';
+                addToConsole('Консоль развернута', 'success');
+            }
+
+            isMaximized = !isMaximized;
+        });
+
+        // Подсказки команд
+        suggestions.forEach(suggestion => {
+            suggestion.addEventListener('click', () => {
+                consoleInput.value = suggestion.getAttribute('data-command');
+                consoleInput.focus();
+            });
+        });
+
+        // Обработка команд в консоли
+        consoleInput.addEventListener('keydown', (e) => {
+            // История команд
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (commandHistory.length > 0) {
+                    if (historyIndex === -1) {
+                        historyIndex = commandHistory.length - 1;
+                    } else if (historyIndex > 0) {
+                        historyIndex--;
+                    }
+                    consoleInput.value = commandHistory[historyIndex];
+                }
+                return;
+            }
+
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (commandHistory.length > 0 && historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    consoleInput.value = commandHistory[historyIndex];
+                } else {
+                    historyIndex = -1;
+                    consoleInput.value = '';
+                }
+                return;
+            }
+
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const input = consoleInput.value.trim().toLowerCase();
+
+                // Автодополнение команд
+                for (let suggestion of suggestions) {
+                    const cmd = suggestion.getAttribute('data-command');
+                    if (cmd.startsWith(input) && input !== cmd) {
+                        consoleInput.value = cmd;
+                        break;
+                    }
+                }
+                return;
+            }
+
+            if (e.key === 'Enter') {
+                const command = consoleInput.value.trim();
+                consoleInput.value = '';
+
+                // Добавляем введенную команду в консоль
+                addToConsole(`> ${command}`);
+
+                // Сохраняем в историю
+                commandHistory.push(command);
+                historyIndex = -1;
+
+                // Обработка команд
+                processCommand(command.toLowerCase());
+            }
+        });
+
+        // Добавление сообщения в консоль
+        function addToConsole(message, type = '') {
+            const line = document.createElement('div');
+            line.className = 'console-line';
+
+            const prefix = document.createElement('span');
+            prefix.className = 'console-prefix';
+            prefix.textContent = '>';
+
+            const msg = document.createElement('span');
+            msg.className = `console-message ${type}`;
+            msg.textContent = message;
+
+            line.appendChild(prefix);
+            line.appendChild(msg);
+            consoleContent.appendChild(line);
+
+            // Прокрутка вниз
+            consoleContent.scrollTop = consoleContent.scrollHeight;
+        }
+
+        // Обработка команд
+        function processCommand(command) {
+            const cmd = command.toLowerCase();
+
+            if (cmd === 'help') {
+                showHelp();
+            } else if (cmd === 'enablecheats') {
+                enableCheats();
+            } else if (cmd === 'scamdisable') {
+                scamDisable();
+            } else if (cmd === 'godmode') {
+                toggleGodMode();
+            } else if (cmd === 'win') {
+                forceWin();
+            } else if (cmd === 'reset') {
+                resetGame();
+            } else if (cmd === 'clear') {
+                clearLogs();
+            } else if (cmd === 'time') {
+                showTime();
+            } else if (cmd.startsWith('theme ')) {
+                changeTheme(cmd);
+            } else if (cmd === 'about') {
+                showAbout();
+            } else if (cmd === 'easteregg') {
+                showEasterEgg();
+            } else if (cmd === 'exit') {
+                cheatConsole.style.display = 'none';
+                addToConsole('Консоль закрыта', 'info');
+            } else if (cmd) {
+                addToConsole(`Неизвестная команда: "${command}"`, 'error');
+                addToConsole('Введите "help" для списка команд', 'info');
+            }
+        }
+
+        // Показать справку по командам
+        function showHelp() {
+            addToConsole('Доступные команды:', 'info');
+            addToConsole('enableCheats - включить режим читов', 'info');
+            addToConsole('scamDisable - отключить обман бота', 'info');
+            addToConsole('godMode - включить/выключить режим бога', 'info');
+            addToConsole('win - немедленно выиграть текущую игру', 'info');
+            addToConsole('reset - сбросить текущую игру', 'info');
+            addToConsole('clear - очистить консоль', 'info');
+            addToConsole('time - показать текущее время', 'info');
+            addToConsole('theme [light/dark] - изменить тему сайта', 'info');
+            addToConsole('about - информация о разработчике', 'info');
+            addToConsole('easteregg - показать пасхалку', 'info');
+            addToConsole('exit - закрыть консоль', 'info');
+        }
+
+        // Включить читы
+        function enableCheats() {
+            cheatsEnabled = true;
+            addToConsole('Режим читов включен!', 'success');
+            addToConsole('Теперь доступны дополнительные команды', 'info');
+        }
+
+        // Отключить обман бота
+        function scamDisable() {
+            if (!cheatsEnabled) {
+                addToConsole('Ошибка: сначала включите читы командой enableCheats', 'error');
+                return;
+            }
+
+            scamDisabled = true;
+            addToConsole('Обман бота отключен!', 'success');
+            addToConsole('Теперь бот играет честно', 'info');
+        }
+
+        // Включить/выключить режим бога
+        function toggleGodMode() {
+            if (!cheatsEnabled) {
+                addToConsole('Ошибка: сначала включите читы командой enableCheats', 'error');
+                return;
+            }
+
+            godMode = !godMode;
+            addToConsole(`Режим бога ${godMode ? 'включен' : 'выключен'}!`, 'success');
+        }
+
+        // Принудительно выиграть игру
+        function forceWin() {
+            if (!cheatsEnabled) {
+                addToConsole('Ошибка: сначала включите читы командой enableCheats', 'error');
+                return;
+            }
+
+            // Заполняем поле для победы игрока
+            for (let i = 0; i < 9; i++) {
+                if (gameState[i] === '') {
+                    gameState[i] = 'X';
+                    cells[i].classList.add('x');
+                }
+            }
+
+            endGame(false);
+            gameMessage.textContent = 'Ты победил с помощью читов!';
+            addToConsole('Вы принудительно выиграли игру!', 'success');
+        }
+
+        // Очистить логи консоли
+        function clearLogs() {
+            consoleContent.innerHTML = '';
+            addToConsole('Логи консоли очищены', 'success');
+        }
+
+        // Показать текущее время
+        function showTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            const dateString = now.toLocaleDateString();
+            addToConsole(`Текущее время: ${timeString}`, 'info');
+            addToConsole(`Дата: ${dateString}`, 'info');
+        }
+
+        // Изменить тему сайта
+        function changeTheme(cmd) {
+            const theme = cmd.split(' ')[1];
+
+            if (theme === 'dark') {
+                body.classList.add('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                localStorage.setItem('theme', 'dark');
+                addToConsole('Тема изменена на темную', 'success');
+            } else if (theme === 'light') {
+                body.classList.remove('dark-mode');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                localStorage.setItem('theme', 'light');
+                addToConsole('Тема изменена на светлую', 'success');
+            } else {
+                addToConsole('Использование: theme [light/dark]', 'error');
+            }
+        }
+
+        // Информация о разработчике
+        function showAbout() {
+            addToConsole('Разработчик: TransHata', 'info');
+            addToConsole('Специализация: Веб-разработка, Python, JavaScript', 'info');
+            addToConsole('Сайт: transhata.ru', 'info');
+            addToConsole('GitHub: github.com/TransHata', 'info');
+            addToConsole('Telegram: @TransHata', 'info');
+        }
+
+        // Показать пасхалку
+        function showEasterEgg() {
+            addToConsole('Найдена пасхалка! 🥚', 'warning');
+            addToConsole('⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣀⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀', 'info');
+            addToConsole('⠀⠀⠀⠀⠀⠀⣠⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣶⣄⠀⠀⠀⠀⠀', 'info');
+            addToConsole('⠀⠀⠀⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀', 'info');
+            addToConsole('⠀⠀⠀⣰⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀', 'info');
+            addToConsole('⠀⠀⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠿⠿⣿⣿⣿⣿⣿⣿⣿⡇⠀', 'info');
+            addToConsole('⠀⢠⣿⣿⣿⣿⣿⣿⣿⠟⠋⠁⠀⠀⠀⠀⠀⠉⠙⠻⣿⣿⣿⣿⡄', 'info');
+            addToConsole('⠀⣾⣿⣿⣿⣿⣿⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣷', 'info');
+            addToConsole('⢠⣿⣿⣿⣿⡿⠃⠀⢀⣠⣤⣤⣤⣤⣤⣤⣤⣄⡀⠀⠀⠀⠘⢿⣿', 'info');
+            addToConsole('⣸⣿⣿⣿⡟⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⠀⠀⠀⠈⢻', 'info');
+            addToConsole('⣿⣿⣿⣿⠀⢀⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣷⡀⠀⠀⢸', 'info');
+            addToConsole('⢹⣿⣿⣿⡀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠀⢀⣾', 'info');
+            addToConsole('⠘⣿⣿⣿⣧⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠁⣠⣿⣿', 'info');
+            addToConsole('⠀⠹⣿⣿⣿⣷⣜⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣛⣥⣾⣿⣿⠇', 'info');
+            addToConsole('⠀⠀⠘⢿⣿⣿⣿⣿⣶⣤⣭⣭⣭⣭⣭⣥⣴⣶⣿⣿⣿⣿⡿⠋⠀', 'info');
+            addToConsole('⠀⠀⠀⠀⠙⠻⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀', 'info');
+            addToConsole('⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀', 'info');
+            addToConsole('Вы нашли секретное послание от разработчика!', 'success');
+        }
+
+        // ===== Tic Tac Toe Game Logic =====
+        const gameBoard = document.getElementById('game-board');
+        const gameInfo = document.getElementById('game-info');
+        const gameMessage = document.getElementById('game-message');
+        const resetButton = document.getElementById('reset-button');
+        const cells = document.querySelectorAll('.cell');
+        const niPopup = document.getElementById('ni-popup');
+        const botMessage = document.getElementById('bot-message');
+        const botMessageContent = document.getElementById('bot-message-content');
+        const onlyfansLink = document.getElementById('onlyfans-link');
+
+        let currentPlayer = 'X';
+        let gameActive = true;
+        let gameState = ['', '', '', '', '', '', '', '', ''];
+
+        // Winning conditions
+        const winConditions = [
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
+        ];
+
+        // Bot phrases
+        const botPhrases = [
+            "Ага! Попался! 😏",
+            "Думал, я не замечу? 😉",
+            "Ха! Я тебя переиграл! 😎",
+            "Ничего личного, просто бизнес 😄",
+            "Ты же знал, что я тебя обману? 😜",
+            "Попробуй ещё раз, вдруг повезёт! 😄",
+            "Это была ловушка! 😈",
+            "Я же программист, меня не обманешь! 💻"
+        ];
+
+        // Show bot message
+        function showBotMessage() {
+            const randomPhrase = botPhrases[Math.floor(Math.random() * botPhrases.length)];
+            botMessageContent.textContent = randomPhrase;
+            botMessage.classList.add('show');
+
+            setTimeout(() => {
+                botMessage.classList.remove('show');
+            }, 3000);
+        }
+
+        // Show NI popup
+        function showNiPopup() {
+            niPopup.classList.add('show');
+            setTimeout(() => {
+                niPopup.classList.remove('show');
+            }, 1000);
+        }
+
+        // Show fake move
+        function showFakeMove(cell) {
+            const fakeMove = document.createElement('div');
+            fakeMove.className = 'fake-move';
+            cell.appendChild(fakeMove);
+
+            setTimeout(() => {
+                fakeMove.remove();
+            }, 800);
+        }
+
+        // Player makes a move
+        function handleCellClick(e) {
+            const cell = e.target;
+            const index = parseInt(cell.getAttribute('data-index'));
+
+            // Check if cell is empty and game is active
+            if (gameState[index] !== '' || !gameActive) return;
+
+            // Make player move
+            makeMove(index, currentPlayer);
+
+            // Если отключен обман или включен режим бога, бот не жульничает
+            if (scamDisabled || godMode) {
+                if (gameActive) {
+                    setTimeout(makeBotMove, 500);
+                }
+                return;
+            }
+
+            // Check if player created a winning opportunity
+            const playerCanWin = checkImmediateWin('X');
+            if (playerCanWin !== -1) {
+                // Cancel player move
+                gameState[index] = '';
+                cell.classList.remove('x');
+
+                // Show NI effect
+                showNiPopup();
+
+                // Show bot message
+                showBotMessage();
+
+                // With 30% probability, show fake move
+                if (Math.random() < 0.3) {
+                    const emptyCells = gameState
+                        .map((cell, idx) => cell === '' ? idx : null)
+                        .filter(idx => idx !== null && idx !== playerCanWin);
+
+                    if (emptyCells.length > 0) {
+                        const fakeIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                        showFakeMove(cells[fakeIndex]);
+
+                        // Delay the real move
+                        setTimeout(() => {
+                            makeMove(playerCanWin, 'O');
+                        }, 800);
+                        return;
+                    }
+                }
+
+                // Make winning move
+                makeMove(playerCanWin, 'O');
+                return;
+            }
+
+            // If no threat, bot makes move
+            if (gameActive) {
+                setTimeout(makeBotMove, 500);
+            }
+        }
+
+        // Check immediate win
+        function checkImmediateWin(player) {
+            for (let condition of winConditions) {
+                const [a, b, c] = condition;
+                if (gameState[a] === player && gameState[b] === player && gameState[c] === '') return c;
+                if (gameState[a] === player && gameState[c] === player && gameState[b] === '') return b;
+                if (gameState[b] === player && gameState[c] === player && gameState[a] === '') return a;
+            }
+            return -1;
+        }
+
+        // Make a move
+        function makeMove(index, player) {
+            gameState[index] = player;
+            cells[index].classList.add(player.toLowerCase());
+
+            // Check for win or draw
+            const win = checkWin();
+            const draw = checkDraw();
+
+            if (win) {
+                endGame(false);
+                gameMessage.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Я выиграл! 😎';
+            } else if (draw) {
+                endGame(false);
+                gameMessage.textContent = 'Ничья! 🤝';
+            } else {
+                // Switch player
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                gameInfo.textContent = currentPlayer === 'X' ? 'Твой ход!' : 'Мой ход...';
+            }
+        }
+
+        // Bot makes a move
+        function makeBotMove() {
+            if (!gameActive) return;
+
+            // Если включен режим бога, бот делает случайные ходы
+            if (godMode) {
+                let emptyCells = gameState.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+                if (emptyCells.length > 0) {
+                    const randomIndex = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                    makeMove(randomIndex, 'O');
+                }
+                return;
+            }
+
+            // Find best move
+            let bestMove = findBestMove();
+
+            // If no best move, choose random
+            if (bestMove === -1) {
+                let emptyCells = gameState.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
+                if (emptyCells.length > 0) {
+                    bestMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                }
+            }
+
+            // Make move
+            if (bestMove !== -1) {
+                makeMove(bestMove, 'O');
+            }
+        }
+
+        // Find best move (advanced AI)
+        function findBestMove() {
+            // 1. Try to win
+            for (let condition of winConditions) {
+                const [a, b, c] = condition;
+                if (gameState[a] === 'O' && gameState[b] === 'O' && gameState[c] === '') return c;
+                if (gameState[a] === 'O' && gameState[c] === 'O' && gameState[b] === '') return b;
+                if (gameState[b] === 'O' && gameState[c] === 'O' && gameState[a] === '') return a;
+            }
+
+            // 2. Block player win
+            for (let condition of winConditions) {
+                const [a, b, c] = condition;
+                if (gameState[a] === 'X' && gameState[b] === 'X' && gameState[c] === '') return c;
+                if (gameState[a] === 'X' && gameState[c] === 'X' && gameState[b] === '') return b;
+                if (gameState[b] === 'X' && gameState[c] === 'X' && gameState[a] === '') return a;
+            }
+
+            // 3. Create fork (two winning opportunities)
+            for (let i = 0; i < 9; i++) {
+                if (gameState[i] === '') {
+                    const tempState = [...gameState];
+                    tempState[i] = 'O';
+                    let winCount = 0;
+
+                    for (let cond of winConditions) {
+                        const [a, b, c] = cond;
+                        if (tempState[a] === 'O' && tempState[b] === 'O' && tempState[c] === '') winCount++;
+                        if (tempState[a] === 'O' && tempState[c] === 'O' && tempState[b] === '') winCount++;
+                        if (tempState[b] === 'O' && tempState[c] === 'O' && tempState[a] === '') winCount++;
+                    }
+
+                    if (winCount >= 2) return i;
+                }
+            }
+
+            // 4. Block opponent fork
+            for (let i = 0; i < 9; i++) {
+                if (gameState[i] === '') {
+                    const tempState = [...gameState];
+                    tempState[i] = 'X';
+                    let winCount = 0;
+
+                    for (let cond of winConditions) {
+                        const [a, b, c] = cond;
+                        if (tempState[a] === 'X' && tempState[b] === 'X' && tempState[c] === '') winCount++;
+                        if (tempState[a] === 'X' && tempState[c] === 'X' && tempState[b] === '') winCount++;
+                        if (tempState[b] === 'X' && tempState[c] === 'X' && tempState[a] === '') winCount++;
+                    }
+
+                    if (winCount >= 2) return i;
+                }
+            }
+
+            // 5. Take center
+            if (gameState[4] === '') return 4;
+
+            // 6. Take opposite corner
+            const corners = [[0,8], [2,6], [6,2], [8,0]];
+            for (let [playerCorner, opposite] of corners) {
+                if (gameState[playerCorner] === 'X' && gameState[opposite] === '') {
+                    return opposite;
+                }
+            }
+
+            // 7. Take empty corner
+            const cornerList = [0, 2, 6, 8];
+            const emptyCorners = cornerList.filter(index => gameState[index] === '');
+            if (emptyCorners.length > 0) {
+                return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+            }
+
+            // 8. Take empty side
+            const sides = [1, 3, 5, 7];
+            const emptySides = sides.filter(index => gameState[index] === '');
+            if (emptySides.length > 0) {
+                return emptySides[Math.floor(Math.random() * emptySides.length)];
+            }
+
+            return -1;
+        }
+
+        // Check for win
+        function checkWin() {
+            for (let condition of winConditions) {
+                const [a, b, c] = condition;
+                if (gameState[a] !== '' &&
+                    gameState[a] === gameState[b] &&
+                    gameState[a] === gameState[c]) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Check for draw
+        function checkDraw() {
+            return !gameState.includes('');
+        }
+
+        // End the game
+        function endGame() {
+            gameActive = false;
+        }
+
+        // Reset the game
+        function resetGame() {
+            currentPlayer = 'X';
+            gameActive = true;
+            gameState = ['', '', '', '', '', '', '', '', ''];
+            gameInfo.textContent = 'Твой ход! Кликай на ячейку';
+            gameMessage.textContent = '';
+
+            // Clear cells
+            cells.forEach(cell => {
+                cell.classList.remove('x', 'o');
+            });
+
+            addToConsole('Игра сброшена', 'success');
+        }
+
+        // Rickroll protection
+        let rickrollCount = 0;
+        onlyfansLink.addEventListener('click', function(e) {
+            rickrollCount++;
+            if (rickrollCount === 3) {
+                e.preventDefault();
+                onlyfansLink.href = "https://onlyfans.com/";
+                onlyfansLink.textContent = "Ты победил! Настоящий OnlyFans";
+                onlyfansLink.style.background = "linear-gradient(45deg, #ff85a2, #ff6b6b)";
+            }
+        });
+
+        // Event listeners
+        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
+        resetButton.addEventListener('click', resetGame);
+
+        // ===== Интерактивные музыкальные карточки =====
+        function setupMusicCards() {
+            const artistCards = document.querySelectorAll('.artist-card');
+
+            artistCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const artistName = this.querySelector('.artist-name').textContent;
+                    showNotification(`Сейчас играет: ${artistName}`, 'music');
+
+                    // Добавляем анимацию воспроизведения
+                    const icon = this.querySelector('.artist-icon');
+                    icon.innerHTML = '<i class="fas fa-play"></i>';
+                    icon.style.backgroundColor = 'var(--accent)';
+                    icon.style.color = 'var(--bg)';
+
+                    // Сбрасываем другие карточки
+                    artistCards.forEach(otherCard => {
+                        if (otherCard !== card) {
+                            otherCard.querySelector('.artist-icon').innerHTML = '<i class="fas fa-microphone-alt"></i>';
+                            otherCard.querySelector('.artist-icon').style.backgroundColor = '';
+                            otherCard.querySelector('.artist-icon').style.color = '';
+                        }
+                    });
                 });
-            }
+            });
+        }
+
+        // ===== Система уведомлений =====
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-icon">
+                    <i class="fas fa-${type === 'music' ? 'music' : 'info-circle'}"></i>
+                </div>
+                <div class="notification-content">${message}</div>
+                <div class="notification-close"><i class="fas fa-times"></i></div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Показываем уведомление
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+
+            // Автоматическое закрытие
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+
+            // Ручное закрытие
+            notification.querySelector('.notification-close').addEventListener('click', () => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            });
+        }
+
+        // ===== Инициализация =====
+        window.addEventListener('DOMContentLoaded', () => {
+            checkSystemTheme();
+            setupMusicCards();
+
+            // Пример использования уведомления
         });
-    });
-
-    // Header effect
-    window.addEventListener('scroll', () => {
-        const header = document.getElementById('header');
-        if (window.scrollY > 50) {
-            header.style.background = 'rgba(10, 10, 15, 0.98)';
-            header.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.2)';
-        } else {
-            header.style.background = 'rgba(10, 10, 15, 0.92)';
-            header.style.boxShadow = 'none';
-        }
-    });
-
-    // Floating elements animation
-    const floatingElements = document.querySelectorAll('.floating');
-    floatingElements.forEach(el => {
-        el.style.animationDelay = `${Math.random() * 5}s`;
-    });
-
-    // Tic Tac Toe Game Logic
-    const gameBoard = document.getElementById('game-board');
-    const gameInfo = document.getElementById('game-info');
-    const gameMessage = document.getElementById('game-message');
-    const resetButton = document.getElementById('reset-button');
-    const cells = document.querySelectorAll('.cell');
-
-    let currentPlayer = 'X'; // Player is X, bot is O
-    let gameActive = true;
-    let gameState = ['', '', '', '', '', '', '', '', ''];
-
-    // Winning conditions
-    const winConditions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
-        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
-        [0, 4, 8], [2, 4, 6]             // diagonals
-    ];
-
-    // Player makes a move
-    function handleCellClick(e) {
-        const cell = e.target;
-        const index = parseInt(cell.getAttribute('data-index'));
-
-        // Check if cell is empty and game is active
-        if (gameState[index] !== '' || !gameActive) return;
-
-        // Make player move
-        makeMove(index, currentPlayer);
-
-        // Проверяем, не создал ли игрок выигрышную ситуацию для себя
-        const playerCanWin = checkImmediateWin('X');
-        if (playerCanWin !== -1) {
-            // Отменяем ход игрока
-            gameState[index] = '';
-            cell.classList.remove('x');
-
-            // Ставим выигрышный нолик
-            makeMove(playerCanWin, 'O');
-            gameMessage.textContent = 'НИ!';
-            return;
-        }
-
-        // Если не было угрозы, бот делает обычный ход
-        if (gameActive) {
-            setTimeout(makeBotMove, 500);
-        }
-    }
-
-    // Проверка, может ли игрок выиграть следующим ходом
-    function checkImmediateWin(player) {
-        for (let i = 0; i < winConditions.length; i++) {
-            const [a, b, c] = winConditions[i];
-
-            // Проверяем все комбинации, где две клетки заняты игроком и одна пуста
-            if (gameState[a] === player && gameState[b] === player && gameState[c] === '') return c;
-            if (gameState[a] === player && gameState[c] === player && gameState[b] === '') return b;
-            if (gameState[b] === player && gameState[c] === player && gameState[a] === '') return a;
-        }
-        return -1;
-    }
-
-    // Make a move
-    function makeMove(index, player) {
-        gameState[index] = player;
-        cells[index].classList.add(player.toLowerCase());
-
-        // Check for win or draw
-        const win = checkWin();
-        const draw = checkDraw();
-
-        if (win) {
-            endGame(false);
-            gameMessage.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Я выиграл! 😎';
-        } else if (draw) {
-            endGame(false);
-            gameMessage.textContent = 'Ничья! 🤝';
-        } else {
-            // Switch player
-            currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            gameInfo.textContent = currentPlayer === 'X' ? 'Твой ход!' : 'Мой ход...';
-        }
-    }
-
-    // Bot makes a move
-    function makeBotMove() {
-        if (!gameActive) return;
-
-        // Find best move - simple AI
-        let bestMove = findBestMove();
-
-        // If no best move found, choose random
-        if (bestMove === -1) {
-            let emptyCells = gameState.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
-            if (emptyCells.length > 0) {
-                bestMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-            }
-        }
-
-        // Make bot move
-        if (bestMove !== -1) {
-            makeMove(bestMove, 'O');
-        }
-    }
-
-    // Simple AI to find best move
-    function findBestMove() {
-        // Try to win
-        for (let i = 0; i < winConditions.length; i++) {
-            const [a, b, c] = winConditions[i];
-            if (gameState[a] === 'O' && gameState[b] === 'O' && gameState[c] === '') return c;
-            if (gameState[a] === 'O' && gameState[c] === 'O' && gameState[b] === '') return b;
-            if (gameState[b] === 'O' && gameState[c] === 'O' && gameState[a] === '') return a;
-        }
-
-        // Block player win
-        for (let i = 0; i < winConditions.length; i++) {
-            const [a, b, c] = winConditions[i];
-            if (gameState[a] === 'X' && gameState[b] === 'X' && gameState[c] === '') return c;
-            if (gameState[a] === 'X' && gameState[c] === 'X' && gameState[b] === '') return b;
-            if (gameState[b] === 'X' && gameState[c] === 'X' && gameState[a] === '') return a;
-        }
-
-        // Take center if available
-        if (gameState[4] === '') return 4;
-
-        // Take corner if available
-        const corners = [0, 2, 6, 8];
-        const availableCorners = corners.filter(index => gameState[index] === '');
-        if (availableCorners.length > 0) {
-            return availableCorners[Math.floor(Math.random() * availableCorners.length)];
-        }
-
-        // Otherwise, no best move found
-        return -1;
-    }
-
-    // Check for win
-    function checkWin() {
-        for (let i = 0; i < winConditions.length; i++) {
-            const [a, b, c] = winConditions[i];
-            if (gameState[a] !== '' &&
-                gameState[a] === gameState[b] &&
-                gameState[a] === gameState[c]) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    // Check for draw
-    function checkDraw() {
-        return !gameState.includes('');
-    }
-
-    // End the game
-    function endGame(draw) {
-        gameActive = false;
-    }
-
-    // Reset the game
-    function resetGame() {
-        currentPlayer = 'X';
-        gameActive = true;
-        gameState = ['', '', '', '', '', '', '', '', ''];
-        gameInfo.textContent = 'Твой ход! Кликай на ячейку';
-        gameMessage.textContent = '';
-
-        // Clear cells
-        cells.forEach(cell => {
-            cell.classList.remove('x', 'o');
-        });
-    }
-
-    // Event listeners
-    cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-    resetButton.addEventListener('click', resetGame);
-</script>
+    </script>
 </body>
 </html>
