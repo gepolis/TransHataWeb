@@ -10,6 +10,7 @@ def hello_world():  # put application's code here
 @app.route('/new')
 def new():  # put application's code here
     return render_template("new.html")
+
 @app.route('/purple')
 def purple():  # put application's code here
     return render_template("purple.html")
