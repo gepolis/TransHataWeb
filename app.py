@@ -558,7 +558,7 @@ def new():
 def purple():
     return render_template("new.html")
 
-@app.route('/admin/clear-cache', methods=['POST'])
+@app.route('/admin/clear-cache', methods=['GET'])
 @token_required
 def clear_cache(current_user):
     cache.clear()
