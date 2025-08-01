@@ -5,11 +5,17 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import jwt
 import datetime
 from functools import wraps
-
+from flask_caching import Cache  # Импортируем модуль кэширования
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://gen_user:ovLX1T)Hpg-5%3E_@94.198.216.178:5432/transhata'
 app.config['SECRET_KEY'] = 'GU_GEPOLIS_GUAPPSUPPORT_ADMIN_SECRET_KEY_2'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Конфигурация кэширования
+app.config['CACHE_TYPE'] = 'SimpleCache'  # Простое in-memory кэширование
+app.config['CACHE_DEFAULT_TIMEOUT'] = 1800  # 5 минут (в секундах)
+cache = Cache(app)  # Инициализация кэша
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -472,6 +478,7 @@ def public_projects():
 
 # Публичные API для фронтенда
 @app.route('/api/hero/p')
+@cache.cached()  # Добавляем кэширование
 def get_hero():
     content = HeroContent.query.first()
     if not content:
@@ -482,8 +489,8 @@ def get_hero():
         "text": content.text
     })
 
-
 @app.route('/api/about/p')
+@cache.cached()  # Добавляем кэширование
 def get_about():
     content = AboutContent.query.first()
     if not content:
@@ -496,8 +503,8 @@ def get_about():
         "quote": content.quote
     })
 
-
 @app.route('/api/artists/p')
+@cache.cached()  # Добавляем кэширование
 def get_artists():
     artists = Artist.query.all()
     return jsonify([{
@@ -507,8 +514,8 @@ def get_artists():
         "photo": artist.photo
     } for artist in artists])
 
-
 @app.route('/api/projects/p')
+@cache.cached()  # Добавляем кэширование
 def get_projects():
     projects = Project.query.all()
     return jsonify([{
@@ -518,15 +525,14 @@ def get_projects():
         "link": project.link
     } for project in projects])
 
-
-# Новые публичные API для навыков
 @app.route('/api/skills/p')
+@cache.cached()  # Добавляем кэширование
 def get_skills():
     skills = Skill.query.order_by(Skill.order.asc()).all()
     return jsonify([skill.name for skill in skills])
 
-
 @app.route('/api/skillcards/p')
+@cache.cached()  # Добавляем кэширование
 def get_skillcards():
     cards = SkillCard.query.order_by(SkillCard.order.asc()).all()
     return jsonify([{
@@ -552,6 +558,11 @@ def new():
 def purple():
     return render_template("new.html")
 
+@app.route('/admin/clear-cache', methods=['POST'])
+@token_required
+def clear_cache(current_user):
+    cache.clear()
+    return jsonify({'message': 'Cache cleared successfully!'})
 
 
 if __name__ == '__main__':
