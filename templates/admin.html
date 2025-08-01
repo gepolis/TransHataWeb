@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | TransHata</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        :root {
+            --bg: #0a0a0f;
+            --surface: #16161d;
+            --primary: #d946ef; /* Фиолетовый акцент */
+            --secondary: #ec4899; /* Розовый акцент */
+            --text: #ffffff;
+            --text-secondary: #b0b0c0;
+            --border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            --success: #10b981;
+            --error: #ef4444;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(217, 70, 239, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 20%);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Стили для страницы входа */
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--surface);
+            padding: 50px 40px;
+            border: 1px solid var(--primary);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(217, 70, 239, 0.05));
+            z-index: 0;
+        }
+
+        .login-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .login-logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .login-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: var(--text);
+            font-weight: 700;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            text-align: left;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: var(--text);
+            font-size: 0.95rem;
+        }
+
+        .form-input {
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(217, 70, 239, 0.05);
+        }
+
+        .login-btn {
+            padding: 16px;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .login-btn:hover {
+            background: #c026d3;
+        }
+
+        .admin-link {
+            margin-top: 30px;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .admin-link a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .admin-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* Стили для админ-панели */
+        .admin-panel {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(22, 22, 29, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--primary);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .admin-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .admin-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .admin-btn {
+            padding: 8px 20px;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .admin-btn:hover {
+            background: rgba(217, 70, 239, 0.1);
+            border-color: var(--primary);
+        }
+
+        /* Навигация по вкладкам */
+        .admin-tabs {
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+        }
+
+        .tabs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            padding: 15px 20px;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--text);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+            background: rgba(217, 70, 239, 0.05);
+        }
+
+        .admin-section {
+            padding: 100px 0 50px;
+        }
+
+        .admin-section-content {
+            display: none;
+        }
+
+        .admin-section-content.active {
+            display: block;
+        }
+
+        .admin-section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            color: var(--text);
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .admin-form {
+            display: grid;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-textarea {
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 1rem;
+            transition: var(--transition);
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(217, 70, 239, 0.05);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background: #c026d3;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 12px 30px;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--primary);
+        }
+
+        .items-list {
+            margin-top: 40px;
+        }
+
+        .list-header {
+            display: grid;
+            grid-template-columns: 1fr 150px 100px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            font-weight: 600;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+
+        .list-item {
+            display: grid;
+            grid-template-columns: 1fr 150px 100px;
+            padding: 15px;
+            border: 1px solid var(--border);
+            border-top: none;
+            align-items: center;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .notification {
+            position: fixed;
+            top: 90px;
+            right: 20px;
+            padding: 15px 25px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--success);
+            z-index: 2000;
+            transform: translateX(120%);
+            transition: transform 0.4s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            border-left-color: var(--error);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .list-header,
+            .list-item {
+                grid-template-columns: 1fr 100px 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .admin-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .list-header,
+            .list-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .item-actions {
+                justify-content: flex-end;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Страница входа -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-content">
+                <div class="login-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <h1>Admin Panel</h1>
+                </div>
+                <h2 class="login-title">Вход в админ-панель</h2>
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label class="form-label">Имя пользователя</label>
+                        <input type="text" class="form-input" id="username" placeholder="admin" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Пароль</label>
+                        <input type="password" class="form-input" id="password" placeholder="••••••••" required>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </button>
+                </form>
+                <div class="admin-link">
+                    Вернуться на <a href="/">основной сайт</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Админ-панель (изначально скрыта) -->
+    <div id="adminPage" style="display: none;">
+        <!-- Шапка админ-панели -->
+        <div class="admin-panel">
+            <div class="admin-container">
+                <div class="admin-title">
+                    <i class="fas fa-lock"></i>
+                    <span>Админ-панель TransHata</span>
+                </div>
+                <div class="admin-actions">
+                    <button class="admin-btn" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Уведомления -->
+        <div class="notification" id="notification">
+            Данные успешно сохранены!
+        </div>
+
+        <!-- Основной контент админ-панели -->
+        <div class="admin-section">
+                    <!-- Навигация по вкладкам -->
+        <div class="admin-tabs">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="hero">Главная</button>
+                <button class="tab-btn" data-tab="about">Обо мне</button>
+                <button class="tab-btn" data-tab="artists">Артисты</button>
+                <button class="tab-btn" data-tab="projects">Проекты</button>
+                <button class="tab-btn" data-tab="skills">Навыки</button>
+                <button class="tab-btn" data-tab="skillcards">Карточки навыков</button>
+            </div>
+        </div>
+            <div class="container">
+                <!-- Секция главной страницы -->
+                <div class="admin-section-content active" id="heroSection">
+                    <h2 class="admin-section-title">Редактирование главной страницы</h2>
+                    <form class="admin-form" id="heroForm">
+                        <div class="form-group">
+                            <label class="form-label">Заголовок</label>
+                            <input type="text" class="form-input" id="heroTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Подзаголовок</label>
+                            <input type="text" class="form-input" id="heroSubtitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Основной текст</label>
+                            <textarea class="form-textarea" id="heroText" required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Сохранить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Секция "Обо мне" -->
+                <div class="admin-section-content" id="aboutSection">
+                    <h2 class="admin-section-title">Редактирование раздела "Обо мне"</h2>
+                    <form class="admin-form" id="aboutForm">
+                        <div class="form-group">
+                            <label class="form-label">Заголовок</label>
+                            <input type="text" class="form-input" id="aboutTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Текст 1</label>
+                            <textarea class="form-textarea" id="aboutText1" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Текст 2</label>
+                            <textarea class="form-textarea" id="aboutText2" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Текст 3</label>
+                            <textarea class="form-textarea" id="aboutText3" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Цитата</label>
+                            <textarea class="form-textarea" id="aboutQuote" required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-save"></i> Сохранить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Секция артистов -->
+                <div class="admin-section-content" id="artistsSection">
+                    <h2 class="admin-section-title">Управление артистами</h2>
+                    <form class="admin-form" id="artistForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Имя артиста</label>
+                                <input type="text" class="form-input" id="artistName" placeholder="Введите имя" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Жанр</label>
+                                <input type="text" class="form-input" id="artistGenre" placeholder="Например: Поп • Альтернатива" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Цитата</label>
+                            <textarea class="form-textarea" id="artistQuote" placeholder="Краткое описание или цитата" required></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-plus"></i> Добавить артиста
+                            </button>
+                            <button type="button" class="btn-secondary" id="resetArtistForm">
+                                Очистить
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="items-list">
+                        <div class="list-header">
+                            <div>Артист</div>
+                            <div>Жанр</div>
+                            <div>Действия</div>
+                        </div>
+                        <div id="artistsList">
+                            <!-- Список артистов будет сгенерирован здесь -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Секция проектов -->
+                <div class="admin-section-content" id="projectsSection">
+                    <h2 class="admin-section-title">Управление проектами</h2>
+                    <form class="admin-form" id="projectForm">
+                        <div class="form-group">
+                            <label class="form-label">Название проекта</label>
+                            <input type="text" class="form-input" id="projectTitle" placeholder="Введите название" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Технологии (через запятую)</label>
+                            <input type="text" class="form-input" id="projectTech" placeholder="Например: Flask, Pillow, Postgresql" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Описание</label>
+                            <textarea class="form-textarea" id="projectDescription" placeholder="Описание проекта" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Ссылка</label>
+                            <input type="text" class="form-input" id="projectLink" placeholder="https://example.com">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-plus"></i> Добавить проект
+                            </button>
+                            <button type="button" class="btn-secondary" id="resetProjectForm">
+                                Очистить
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="items-list">
+                        <div class="list-header">
+                            <div>Проект</div>
+                            <div>Технологии</div>
+                            <div>Действия</div>
+                        </div>
+                        <div id="projectsList">
+                            <!-- Список проектов будет сгенерирован здесь -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Секция навыков -->
+                <div class="admin-section-content" id="skillsSection">
+                    <h2 class="admin-section-title">Управление навыками</h2>
+                    <form class="admin-form" id="skillForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Название навыка</label>
+                                <input type="text" class="form-input" id="skillName" placeholder="Например: Flask" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Категория</label>
+                                <input type="text" class="form-input" id="skillCategory" placeholder="Например: Backend">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-plus"></i> Добавить навык
+                            </button>
+                            <button type="button" class="btn-secondary" id="resetSkillForm">
+                                Очистить
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="items-list">
+                        <div class="list-header">
+                            <div>Навык</div>
+                            <div>Категория</div>
+                            <div>Действия</div>
+                        </div>
+                        <div id="skillsList">
+                            <!-- Список навыков будет сгенерирован здесь -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Секция карточек навыков -->
+                <div class="admin-section-content" id="skillcardsSection">
+                    <h2 class="admin-section-title">Управление карточками навыков</h2>
+                    <form class="admin-form" id="skillcardForm">
+                        <div class="form-group">
+                            <label class="form-label">Заголовок</label>
+                            <input type="text" class="form-input" id="skillcardTitle" placeholder="Например: Frontend Разработка" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Технологии (через запятую)</label>
+                            <input type="text" class="form-input" id="skillcardTechnologies" placeholder="Например: Vue.js, HTML5/CSS3" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Описание</label>
+                            <textarea class="form-textarea" id="skillcardDescription" placeholder="Описание навыка" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Иконка (FontAwesome)</label>
+                            <input type="text" class="form-input" id="skillcardIcon" placeholder="Например: fas fa-laptop-code" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">
+                                <i class="fas fa-plus"></i> Добавить карточку
+                            </button>
+                            <button type="button" class="btn-secondary" id="resetSkillcardForm">
+                                Очистить
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="items-list">
+                        <div class="list-header">
+                            <div>Заголовок</div>
+                            <div>Технологии</div>
+                            <div>Действия</div>
+                        </div>
+                        <div id="skillcardsList">
+                            <!-- Список карточек навыков будет сгенерирован здесь -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== Конфигурация API =====
+        const API_URL = window.location.origin; // Используем текущий домен
+
+        // ===== Аутентификация =====
+        const loginForm = document.getElementById('loginForm');
+        const loginPage = document.getElementById('loginPage');
+        const adminPage = document.getElementById('adminPage');
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch(`${API_URL}/admin/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.token) {
+                    // Сохраняем токен в localStorage
+                    localStorage.setItem('adminToken', data.token);
+
+                    // Переключаемся на админ-панель
+                    loginPage.style.display = 'none';
+                    adminPage.style.display = 'block';
+
+                    // Загружаем данные
+                    loadAdminData();
+                } else {
+                    showNotification('Неверные учетные данные', true);
+                }
+            } catch (error) {
+                console.error('Ошибка при входе:', error);
+                showNotification('Ошибка сервера', true);
+            }
+        });
+
+        // Проверка аутентификации при загрузке страницы
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('adminToken');
+            if (token) {
+                loginPage.style.display = 'none';
+                adminPage.style.display = 'block';
+                loadAdminData();
+            }
+        });
+
+        // Выход из системы
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            localStorage.removeItem('adminToken');
+            location.reload();
+        });
+
+        // ===== Управление вкладками =====
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const sections = {
+            'hero': document.getElementById('heroSection'),
+            'about': document.getElementById('aboutSection'),
+            'artists': document.getElementById('artistsSection'),
+            'projects': document.getElementById('projectsSection'),
+            'skills': document.getElementById('skillsSection'),
+            'skillcards': document.getElementById('skillcardsSection')
+        };
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+
+                // Удаляем активный класс у всех кнопок
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                // Добавляем активный класс текущей кнопке
+                button.classList.add('active');
+
+                // Скрываем все секции
+                Object.values(sections).forEach(section => {
+                    section.classList.remove('active');
+                });
+
+                // Показываем выбранную секцию
+                if (sections[tabId]) {
+                    sections[tabId].classList.add('active');
+                }
+            });
+        });
+
+        // ===== Управление уведомлениями =====
+        const notification = document.getElementById('notification');
+
+        function showNotification(message, isError = false) {
+            notification.textContent = message;
+            notification.className = 'notification';
+
+            if (isError) {
+                notification.classList.add('error');
+            }
+
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // ===== Загрузка данных =====
+        async function loadAdminData() {
+            try {
+                const token = localStorage.getItem('adminToken');
+
+                // Загрузка данных главной страницы
+                const heroResponse = await fetch(`${API_URL}/admin/hero`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!heroResponse.ok) throw new Error('Ошибка загрузки данных');
+
+                const heroData = await heroResponse.json();
+                document.getElementById('heroTitle').value = heroData.title;
+                document.getElementById('heroSubtitle').value = heroData.subtitle;
+                document.getElementById('heroText').value = heroData.text;
+
+                // Загрузка данных "Обо мне"
+                const aboutResponse = await fetch(`${API_URL}/admin/about`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!aboutResponse.ok) throw new Error('Ошибка загрузки данных');
+
+                const aboutData = await aboutResponse.json();
+                document.getElementById('aboutTitle').value = aboutData.title;
+                document.getElementById('aboutText1').value = aboutData.text1;
+                document.getElementById('aboutText2').value = aboutData.text2;
+                document.getElementById('aboutText3').value = aboutData.text3;
+                document.getElementById('aboutQuote').value = aboutData.quote;
+
+                // Загрузка списка артистов
+                loadArtistsList();
+
+                // Загрузка списка проектов
+                loadProjectsList();
+
+                // Загрузка списка навыков
+                loadSkillsList();
+
+                // Загрузка списка карточек навыков
+                loadSkillcardsList();
+
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
+                showNotification('Ошибка загрузки данных', true);
+            }
+        }
+
+        // ===== Управление артистами =====
+        async function loadArtistsList() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/artists`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка загрузки артистов');
+
+                const data = await response.json();
+
+                const artistsList = document.getElementById('artistsList');
+                artistsList.innerHTML = '';
+
+                data.artists.forEach(artist => {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <div>${artist.name}</div>
+                        <div>${artist.genre}</div>
+                        <div class="item-actions">
+                            <button class="action-btn edit-artist" data-id="${artist.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-artist" data-id="${artist.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    artistsList.appendChild(item);
+                });
+
+                // Обработчики для кнопок
+                document.querySelectorAll('.edit-artist').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const artistId = btn.getAttribute('data-id');
+                        const token = localStorage.getItem('adminToken');
+
+                        try {
+                            const response = await fetch(`${API_URL}/admin/artists/${artistId}`, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            });
+
+                            if (!response.ok) throw new Error('Ошибка загрузки артиста');
+
+                            const artist = await response.json();
+                            editArtist(artist);
+                        } catch (error) {
+                            console.error('Ошибка загрузки артиста:', error);
+                            showNotification('Ошибка загрузки артиста', true);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.delete-artist').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const artistId = btn.getAttribute('data-id');
+                        if (confirm('Удалить этого артиста?')) {
+                            deleteArtist(artistId);
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Ошибка загрузки артистов:', error);
+                showNotification('Ошибка загрузки артистов', true);
+            }
+        }
+
+        function editArtist(artist) {
+            document.getElementById('artistName').value = artist.name;
+            document.getElementById('artistGenre').value = artist.genre;
+            document.getElementById('artistQuote').value = artist.quote;
+
+            const submitBtn = document.querySelector('#artistForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
+            submitBtn.dataset.artistId = artist.id;
+        }
+
+        async function deleteArtist(artistId) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/artists/${artistId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка удаления артиста');
+
+                showNotification('Артист успешно удален');
+                loadArtistsList();
+
+            } catch (error) {
+                console.error('Ошибка удаления артиста:', error);
+                showNotification('Ошибка удаления артиста', true);
+            }
+        }
+
+        document.getElementById('resetArtistForm').addEventListener('click', () => {
+            document.getElementById('artistForm').reset();
+            const submitBtn = document.querySelector('#artistForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить артиста';
+            delete submitBtn.dataset.artistId;
+        });
+
+        document.getElementById('artistForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('artistName').value;
+            const genre = document.getElementById('artistGenre').value;
+            const quote = document.getElementById('artistQuote').value;
+
+            const submitBtn = document.querySelector('#artistForm button[type="submit"]');
+            const artistId = submitBtn.dataset.artistId;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                let response;
+
+                if (artistId) {
+                    // Редактирование существующего артиста
+                    response = await fetch(`${API_URL}/admin/artists/${artistId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ name, genre, quote })
+                    });
+                } else {
+                    // Добавление нового артиста
+                    response = await fetch(`${API_URL}/admin/artists`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ name, genre, quote })
+                    });
+                }
+
+                if (!response.ok) throw new Error('Ошибка сохранения артиста');
+
+                const message = artistId ? 'Изменения артиста сохранены' : 'Артист успешно добавлен';
+                showNotification(message);
+
+                // Сброс формы и перезагрузка списка
+                document.getElementById('artistForm').reset();
+                delete submitBtn.dataset.artistId;
+                submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить артиста';
+                loadArtistsList();
+
+            } catch (error) {
+                console.error('Ошибка сохранения артиста:', error);
+                showNotification('Ошибка сохранения артиста', true);
+            }
+        });
+
+        // ===== Управление проектами =====
+        async function loadProjectsList() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/projects`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка загрузки проектов');
+
+                const data = await response.json();
+
+                const projectsList = document.getElementById('projectsList');
+                projectsList.innerHTML = '';
+
+                data.projects.forEach(project => {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <div>${project.title}</div>
+                        <div>${project.tech}</div>
+                        <div class="item-actions">
+                            <button class="action-btn edit-project" data-id="${project.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-project" data-id="${project.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    projectsList.appendChild(item);
+                });
+
+                // Обработчики для кнопок
+                document.querySelectorAll('.edit-project').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const projectId = btn.getAttribute('data-id');
+                        const token = localStorage.getItem('adminToken');
+
+                        try {
+                            const response = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            });
+
+                            if (!response.ok) throw new Error('Ошибка загрузки проекта');
+
+                            const project = await response.json();
+                            editProject(project);
+                        } catch (error) {
+                            console.error('Ошибка загрузки проекта:', error);
+                            showNotification('Ошибка загрузки проекта', true);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.delete-project').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const projectId = btn.getAttribute('data-id');
+                        if (confirm('Удалить этот проект?')) {
+                            deleteProject(projectId);
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Ошибка загрузки проектов:', error);
+                showNotification('Ошибка загрузки проектов', true);
+            }
+        }
+
+        function editProject(project) {
+            document.getElementById('projectTitle').value = project.title;
+            document.getElementById('projectTech').value = project.tech;
+            document.getElementById('projectDescription').value = project.description;
+            document.getElementById('projectLink').value = project.link || '';
+
+            const submitBtn = document.querySelector('#projectForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
+            submitBtn.dataset.projectId = project.id;
+        }
+
+        async function deleteProject(projectId) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка удаления проекта');
+
+                showNotification('Проект успешно удален');
+                loadProjectsList();
+
+            } catch (error) {
+                console.error('Ошибка удаления проекта:', error);
+                showNotification('Ошибка удаления проекта', true);
+            }
+        }
+
+        document.getElementById('resetProjectForm').addEventListener('click', () => {
+            document.getElementById('projectForm').reset();
+            const submitBtn = document.querySelector('#projectForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить проект';
+            delete submitBtn.dataset.projectId;
+        });
+
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('projectTitle').value;
+            const tech = document.getElementById('projectTech').value;
+            const description = document.getElementById('projectDescription').value;
+            const link = document.getElementById('projectLink').value || '#';
+
+            const submitBtn = document.querySelector('#projectForm button[type="submit"]');
+            const projectId = submitBtn.dataset.projectId;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                let response;
+
+                if (projectId) {
+                    // Редактирование существующего проекта
+                    response = await fetch(`${API_URL}/admin/projects/${projectId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ title, tech, description, link })
+                    });
+                } else {
+                    // Добавление нового проекта
+                    response = await fetch(`${API_URL}/admin/projects`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ title, tech, description, link })
+                    });
+                }
+
+                if (!response.ok) throw new Error('Ошибка сохранения проекта');
+
+                const message = projectId ? 'Изменения проекта сохранены' : 'Проект успешно добавлен';
+                showNotification(message);
+
+                // Сброс формы и перезагрузка списка
+                document.getElementById('projectForm').reset();
+                delete submitBtn.dataset.projectId;
+                submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить проект';
+                loadProjectsList();
+
+            } catch (error) {
+                console.error('Ошибка сохранения проекта:', error);
+                showNotification('Ошибка сохранения проекта', true);
+            }
+        });
+
+        // ===== Управление навыками =====
+        async function loadSkillsList() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/skills`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка загрузки навыков');
+
+                const data = await response.json();
+
+                const skillsList = document.getElementById('skillsList');
+                skillsList.innerHTML = '';
+
+                data.skills.forEach(skill => {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <div>${skill.name}</div>
+                        <div>${skill.category || '-'}</div>
+                        <div class="item-actions">
+                            <button class="action-btn edit-skill" data-id="${skill.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-skill" data-id="${skill.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    skillsList.appendChild(item);
+                });
+
+                // Обработчики для кнопок
+                document.querySelectorAll('.edit-skill').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const skillId = btn.getAttribute('data-id');
+                        const token = localStorage.getItem('adminToken');
+
+                        try {
+                            const response = await fetch(`${API_URL}/admin/skills/${skillId}`, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            });
+
+                            if (!response.ok) throw new Error('Ошибка загрузки навыка');
+
+                            const skill = await response.json();
+                            editSkill(skill);
+                        } catch (error) {
+                            console.error('Ошибка загрузки навыка:', error);
+                            showNotification('Ошибка загрузки навыка', true);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.delete-skill').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const skillId = btn.getAttribute('data-id');
+                        if (confirm('Удалить этот навык?')) {
+                            deleteSkill(skillId);
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Ошибка загрузки навыков:', error);
+                showNotification('Ошибка загрузки навыков', true);
+            }
+        }
+
+        function editSkill(skill) {
+            document.getElementById('skillName').value = skill.name;
+            document.getElementById('skillCategory').value = skill.category || '';
+
+            const submitBtn = document.querySelector('#skillForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
+            submitBtn.dataset.skillId = skill.id;
+        }
+
+        async function deleteSkill(skillId) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/skills/${skillId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка удаления навыка');
+
+                showNotification('Навык успешно удален');
+                loadSkillsList();
+
+            } catch (error) {
+                console.error('Ошибка удаления навыка:', error);
+                showNotification('Ошибка удаления навыка', true);
+            }
+        }
+
+        document.getElementById('resetSkillForm').addEventListener('click', () => {
+            document.getElementById('skillForm').reset();
+            const submitBtn = document.querySelector('#skillForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить навык';
+            delete submitBtn.dataset.skillId;
+        });
+
+        document.getElementById('skillForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('skillName').value;
+            const category = document.getElementById('skillCategory').value || '';
+
+            const submitBtn = document.querySelector('#skillForm button[type="submit"]');
+            const skillId = submitBtn.dataset.skillId;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                let response;
+
+                if (skillId) {
+                    // Редактирование существующего навыка
+                    response = await fetch(`${API_URL}/admin/skills/${skillId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ name, category })
+                    });
+                } else {
+                    // Добавление нового навыка
+                    response = await fetch(`${API_URL}/admin/skills`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ name, category })
+                    });
+                }
+
+                if (!response.ok) throw new Error('Ошибка сохранения навыка');
+
+                const message = skillId ? 'Изменения навыка сохранены' : 'Навык успешно добавлен';
+                showNotification(message);
+
+                // Сброс формы и перезагрузка списка
+                document.getElementById('skillForm').reset();
+                delete submitBtn.dataset.skillId;
+                submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить навык';
+                loadSkillsList();
+
+            } catch (error) {
+                console.error('Ошибка сохранения навыка:', error);
+                showNotification('Ошибка сохранения навыка', true);
+            }
+        });
+
+        // ===== Управление карточками навыков =====
+        async function loadSkillcardsList() {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/skillcards`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка загрузки карточек навыков');
+
+                const data = await response.json();
+
+                const skillcardsList = document.getElementById('skillcardsList');
+                skillcardsList.innerHTML = '';
+
+                data.skillcards.forEach(card => {
+                    const item = document.createElement('div');
+                    item.className = 'list-item';
+                    item.innerHTML = `
+                        <div>${card.title}</div>
+                        <div>${card.technologies}</div>
+                        <div class="item-actions">
+                            <button class="action-btn edit-skillcard" data-id="${card.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-skillcard" data-id="${card.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    `;
+                    skillcardsList.appendChild(item);
+                });
+
+                // Обработчики для кнопок
+                document.querySelectorAll('.edit-skillcard').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const cardId = btn.getAttribute('data-id');
+                        const token = localStorage.getItem('adminToken');
+
+                        try {
+                            const response = await fetch(`${API_URL}/admin/skillcards/${cardId}`, {
+                                headers: {
+                                    'Authorization': `Bearer ${token}`
+                                }
+                            });
+
+                            if (!response.ok) throw new Error('Ошибка загрузки карточки');
+
+                            const card = await response.json();
+                            editSkillcard(card);
+                        } catch (error) {
+                            console.error('Ошибка загрузки карточки:', error);
+                            showNotification('Ошибка загрузки карточки', true);
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.delete-skillcard').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const cardId = btn.getAttribute('data-id');
+                        if (confirm('Удалить эту карточку навыка?')) {
+                            deleteSkillcard(cardId);
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Ошибка загрузки карточек навыков:', error);
+                showNotification('Ошибка загрузки карточек навыков', true);
+            }
+        }
+
+        function editSkillcard(card) {
+            document.getElementById('skillcardTitle').value = card.title;
+            document.getElementById('skillcardTechnologies').value = card.technologies;
+            document.getElementById('skillcardDescription').value = card.description;
+            document.getElementById('skillcardIcon').value = card.icon || '';
+
+            const submitBtn = document.querySelector('#skillcardForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-save"></i> Сохранить изменения';
+            submitBtn.dataset.cardId = card.id;
+        }
+
+        async function deleteSkillcard(cardId) {
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/skillcards/${cardId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) throw new Error('Ошибка удаления карточки');
+
+                showNotification('Карточка успешно удалена');
+                loadSkillcardsList();
+
+            } catch (error) {
+                console.error('Ошибка удаления карточки:', error);
+                showNotification('Ошибка удаления карточки', true);
+            }
+        }
+
+        document.getElementById('resetSkillcardForm').addEventListener('click', () => {
+            document.getElementById('skillcardForm').reset();
+            const submitBtn = document.querySelector('#skillcardForm button[type="submit"]');
+            submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить карточку';
+            delete submitBtn.dataset.cardId;
+        });
+
+        document.getElementById('skillcardForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('skillcardTitle').value;
+            const technologies = document.getElementById('skillcardTechnologies').value;
+            const description = document.getElementById('skillcardDescription').value;
+            const icon = document.getElementById('skillcardIcon').value || 'fas fa-code';
+
+            const submitBtn = document.querySelector('#skillcardForm button[type="submit"]');
+            const cardId = submitBtn.dataset.cardId;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                let response;
+
+                if (cardId) {
+                    // Редактирование существующей карточки
+                    response = await fetch(`${API_URL}/admin/skillcards/${cardId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ title, technologies, description, icon })
+                    });
+                } else {
+                    // Добавление новой карточки
+                    response = await fetch(`${API_URL}/admin/skillcards`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ title, technologies, description, icon })
+                    });
+                }
+
+                if (!response.ok) throw new Error('Ошибка сохранения карточки');
+
+                const message = cardId ? 'Изменения карточки сохранены' : 'Карточка успешно добавлена';
+                showNotification(message);
+
+                // Сброс формы и перезагрузка списка
+                document.getElementById('skillcardForm').reset();
+                delete submitBtn.dataset.cardId;
+                submitBtn.innerHTML = '<i class="fas fa-plus"></i> Добавить карточку';
+                loadSkillcardsList();
+
+            } catch (error) {
+                console.error('Ошибка сохранения карточки:', error);
+                showNotification('Ошибка сохранения карточки', true);
+            }
+        });
+
+        // ===== Сохранение контента =====
+        document.getElementById('heroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('heroTitle').value;
+            const subtitle = document.getElementById('heroSubtitle').value;
+            const text = document.getElementById('heroText').value;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/hero`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, subtitle, text })
+                });
+
+                if (!response.ok) throw new Error('Ошибка сохранения главной страницы');
+
+                showNotification('Главная страница обновлена');
+
+            } catch (error) {
+                console.error('Ошибка сохранения главной страницы:', error);
+                showNotification('Ошибка сохранения главной страницы', true);
+            }
+        });
+
+        document.getElementById('aboutForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const title = document.getElementById('aboutTitle').value;
+            const text1 = document.getElementById('aboutText1').value;
+            const text2 = document.getElementById('aboutText2').value;
+            const text3 = document.getElementById('aboutText3').value;
+            const quote = document.getElementById('aboutQuote').value;
+
+            try {
+                const token = localStorage.getItem('adminToken');
+                const response = await fetch(`${API_URL}/admin/about`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ title, text1, text2, text3, quote })
+                });
+
+                if (!response.ok) throw new Error('Ошибка сохранения раздела "Обо мне"');
+
+                showNotification('Раздел "Обо мне" обновлен');
+
+            } catch (error) {
+                console.error('Ошибка сохранения раздела "Обо мне":', error);
+                showNotification('Ошибка сохранения раздела "Обо мне"', true);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -16,8 +16,8 @@
         :root {
             --bg: #0a0a0f;
             --surface: #16161d;
-            --primary: #ff3366;
-            --secondary: #3366ff;
+            --primary: #d946ef; /* Фиолетовый акцент */
+            --secondary: #ec4899; /* Розовый акцент */
             --text: #ffffff;
             --text-secondary: #b0b0c0;
             --border: rgba(255, 255, 255, 0.08);
@@ -41,8 +41,8 @@
             width: 100%;
             height: 100%;
             background:
-                radial-gradient(circle at 10% 20%, rgba(51, 102, 255, 0.05) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 51, 102, 0.05) 0%, transparent 20%);
+                radial-gradient(circle at 10% 20%, rgba(217, 70, 239, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 20%);
             z-index: -1;
         }
 
@@ -199,7 +199,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 51, 102, 0.1);
+            background: rgba(217, 70, 239, 0.1);
             transform: translateX(-100%);
             transition: var(--transition);
             z-index: -1;
@@ -282,7 +282,7 @@
         }
 
         .skill:hover {
-            background: rgba(255, 51, 102, 0.1);
+            background: rgba(217, 70, 239, 0.1);
             border-color: var(--primary);
         }
 
@@ -304,7 +304,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 51, 102, 0.05));
+            background: linear-gradient(45deg, transparent, rgba(217, 70, 239, 0.05));
         }
 
         .about-image-content {
@@ -325,6 +325,57 @@
             margin: 0 auto;
             line-height: 1.8;
             font-style: italic;
+        }
+
+        /* Навыки */
+        .skills-section {
+            position: relative;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .skill-card {
+            background: var(--surface);
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            border: 1px solid var(--border);
+        }
+
+        .skill-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+        }
+
+        .skill-card-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .skill-card-tech {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .skill-tech-item {
+            font-size: 0.85rem;
+            color: var(--primary);
+            background: rgba(217, 70, 239, 0.1);
+            padding: 5px 15px;
+            border-radius: 0;
+        }
+
+        .skill-card-description {
+            color: var(--text-secondary);
+            line-height: 1.8;
         }
 
         /* Музыкальная секция */
@@ -407,7 +458,7 @@
 
         .project-card:hover {
             transform: translateY(-10px);
-            border-color: var(--secondary);
+            border-color: var(--primary);
         }
 
         .project-title {
@@ -425,8 +476,8 @@
 
         .tech-item {
             font-size: 0.85rem;
-            color: var(--secondary);
-            background: rgba(51, 102, 255, 0.1);
+            color: var(--primary);
+            background: rgba(217, 70, 239, 0.1);
             padding: 5px 15px;
             border-radius: 0;
         }
@@ -455,12 +506,12 @@
             left: 0;
             width: 0;
             height: 1px;
-            background: var(--secondary);
+            background: var(--primary);
             transition: var(--transition);
         }
 
         .project-link:hover {
-            color: var(--secondary);
+            color: var(--primary);
         }
 
         .project-link:hover::after {
@@ -560,7 +611,7 @@
 
         .reset-button:hover {
             border-color: var(--primary);
-            background: rgba(255, 51, 102, 0.1);
+            background: rgba(217, 70, 239, 0.1);
         }
 
         .game-message {
@@ -614,10 +665,11 @@
             color: var(--text);
             transition: var(--transition);
             border: 1px solid var(--border);
+            text-decoration: none;
         }
 
         .social-link:hover {
-            background: rgba(255, 51, 102, 0.1);
+            background: rgba(217, 70, 239, 0.1);
             border-color: var(--primary);
             color: var(--primary);
         }
@@ -736,6 +788,7 @@
                 max-width: 280px;
             }
         }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -761,9 +814,9 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <p class="hero-subtitle">Программирование × Музыка</p>
-                <h1 class="hero-title">Привет, я <span class="hero-highlight">TransHata</span></h1>
-                <p class="hero-text">Программист и меломан, увлеченный созданием цифровых решений и изучением новых музыкальных направлений.</p>
+                <p class="hero-subtitle" id="hero-subtitle"></p>
+                <h1 class="hero-title" id="hero-title"></h1>
+                <p class="hero-text" id="hero-text"></p>
                 <a href="#projects" class="cta-button">
                     <i class="fas fa-arrow-down"></i> Исследовать
                 </a>
@@ -777,25 +830,18 @@
             <h2 class="section-title">Обо мне</h2>
             <div class="about-content">
                 <div class="about-text">
-                    <h3>Мой путь в IT</h3>
-                    <p>Я начал свой путь в программировании несколько лет назад, и с тех пор постоянно совершенствую свои навыки. Мне нравится создавать продукты, которые решают реальные проблемы и приносят пользу людям.</p>
-                    <p>В свободное время я изучаю новые технологии, экспериментирую с различными стеками и участвую в open-source проектах. Мой подход к работе сочетает техническую экспертизу с творческим мышлением.</p>
-                    <div class="skills">
-                        <span class="skill">Flask</span>
-                        <span class="skill">Django</span>
-                        <span class="skill">FastAPI</span>
-                        <span class="skill">JavaScript</span>
-                        <span class="skill">WebSockets</span>
-                        <span class="skill">SQL</span>
-                        <span class="skill">Linux</span>
-                        <span class="skill">Git</span>
-                        <span class="skill">Docker</span>
+                    <h3 id="about-heading"></h3>
+                    <p id="about-text1"></p>
+                    <p id="about-text2"></p>
+                    <p id="about-text3"></p>
+                    <div class="skills" id="skills-tags-container">
+                        <!-- Skills will be populated by JS -->
                     </div>
                 </div>
                 <div class="about-image">
                     <div class="about-image-content">
                         <h3>TransHata</h3>
-                        <p>"Программирование - это искусство решения задач, а музыка - источник вдохновения"</p>
+                        <p id="about-quote"></p>
                     </div>
                 </div>
             </div>
@@ -806,33 +852,8 @@
     <section id="skills" class="section">
         <div class="container">
             <h2 class="section-title">Технические навыки</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3 class="project-title">Frontend Разработка</h3>
-                    <div class="project-tech">
-                        <span class="tech-item">Vue.js</span>
-                        <span class="tech-item">HTML5/CSS3</span>
-                    </div>
-                    <p class="project-description">Создание современных пользовательских интерфейсов с использованием передовых технологий и лучших практик.</p>
-                </div>
-                <div class="project-card">
-                    <h3 class="project-title">Backend Разработка</h3>
-                    <div class="project-tech">
-                        <span class="tech-item">FastApi</span>
-                        <span class="tech-item">WebSockets</span>
-                        <span class="tech-item">Postgresql</span>
-                    </div>
-                    <p class="project-description">Разработка серверной логики, проектирование API и работа с базами данных.</p>
-                </div>
-                <div class="project-card">
-                    <h3 class="project-title">UI/UX Дизайн</h3>
-                    <div class="project-tech">
-                        <span class="tech-item">Figma</span>
-                        <span class="tech-item">Adobe XD</span>
-                        <span class="tech-item">Прототипирование</span>
-                    </div>
-                    <p class="project-description">Создание интуитивно понятных интерфейсов с акцентом на пользовательский опыт.</p>
-                </div>
+            <div class="skills-grid" id="skills-cards-container">
+                <!-- Skills cards will be populated by JS -->
             </div>
         </div>
     </section>
@@ -841,39 +862,8 @@
     <section id="music" class="music-section section">
         <div class="container">
             <h2 class="section-title">Музыкальные предпочтения</h2>
-            <div class="artists-grid">
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">Алёна Швец</h3>
-                    <span class="artist-genre">Поп • Альтернатива</span>
-                    <p class="artist-quote">"Искренние тексты и эмоциональная подача"</p>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">Ваня Дмитриенко</h3>
-                    <span class="artist-genre">Поп • R&B</span>
-                    <p class="artist-quote">"Чувственные композиции и глубокие тексты"</p>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">Дора</h3>
-                    <span class="artist-genre">Поп • Электроника</span>
-                    <p class="artist-quote">"Энергичные биты и современное звучание"</p>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">NЮ</h3>
-                    <span class="artist-genre">Поп • Инди</span>
-                    <p class="artist-quote">"Смелые эксперименты и необычные аранжировки"</p>
-                </div>
+            <div class="artists-grid" id="artists-container">
+                <!-- Artists will be populated by JS -->
             </div>
         </div>
     </section>
@@ -882,41 +872,8 @@
     <section id="projects" class="section">
         <div class="container">
             <h2 class="section-title">Мои проекты</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <h3 class="project-title">Госуслуги 2.0</h3>
-                    <div class="project-tech">
-                        <span class="tech-item">Flask</span>
-                        <span class="tech-item">Pillow</span>
-                        <span class="tech-item">Postgresql</span>
-                    </div>
-                    <p class="project-description">Сатирический проект для генерации мем справок</p>
-                    <a href="https://gosuslugi.com.ru/" class="project-link" target="_blank">
-                        Посмотреть проект <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-                <div class="project-card">
-                    <h3 class="project-title">ЕКАМ</h3>
-                    <div class="project-tech">
-                        <span class="tech-item">Django</span>
-                        <span class="tech-item">Postgresql</span>
-                    </div>
-                    <p class="project-description">Единый комплекс автоматизации мероприятий для школ (Заброшен)</p>
-                    <a href="https://github.com/gepolis/EBook4" class="project-link" target="_blank">
-                        Посмотреть проект <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
-                <div class="project-card">
-                    <h3 class="project-title">Музыкальный Плейлист</h3>
-                    <div class="project-tech">
-                        <span class="tech-item">JavaScript</span>
-                        <span class="tech-item">Spotify API</span>
-                    </div>
-                    <p class="project-description">Интерактивный плейлист с рекомендациями на основе предпочтений</p>
-                    <a href="#" class="project-link">
-                        Посмотреть проект <i class="fas fa-external-link-alt"></i>
-                    </a>
-                </div>
+            <div class="projects-grid" id="projects-container">
+                <!-- Projects will be populated by JS -->
             </div>
         </div>
     </section>
@@ -1007,14 +964,175 @@
     </footer>
 
     <script>
-        // ===== Tic Tac Toe Game Logic =====
-        const gameBoard = document.getElementById('game-board');
-        const gameInfo = document.getElementById('game-info');
-        const gameMessage = document.getElementById('game-message');
-        const resetButton = document.getElementById('reset-button');
+    // ===== API Fetching Functions =====
+    const API_BASE = '/api'; // Базовый URL для API
+
+    // Герой секция
+    async function fetchHero() {
+        try {
+            const response = await fetch(`${API_BASE}/hero/p`);
+            const data = await response.json();
+            document.getElementById('hero-subtitle').textContent = data.subtitle;
+            document.getElementById('hero-title').innerHTML = data.title;
+            document.getElementById('hero-text').textContent = data.text;
+        } catch (error) {
+            console.error('Error loading hero content:', error);
+        }
+    }
+
+    // Секция "Обо мне"
+    async function fetchAbout() {
+        try {
+            const response = await fetch(`${API_BASE}/about/p`);
+            const data = await response.json();
+            document.getElementById('about-heading').textContent = data.title;
+            document.getElementById('about-text1').textContent = data.text1;
+            document.getElementById('about-text2').textContent = data.text2;
+            document.getElementById('about-text3').textContent = data.text3;
+            document.getElementById('about-quote').textContent = data.quote;
+        } catch (error) {
+            console.error('Error loading about content:', error);
+        }
+    }
+
+    // Навыки (теги)
+    async function fetchSkillsTags() {
+        try {
+            const response = await fetch(`${API_BASE}/skills/p`);
+            const skills = await response.json();
+            renderSkillsTags(skills);
+        } catch (error) {
+            console.error('Error loading skills tags:', error);
+        }
+    }
+
+    // Карточки навыков
+    async function fetchSkillsCards() {
+        try {
+            const response = await fetch(`${API_BASE}/skillcards/p`);
+            const skillcards = await response.json();
+            renderSkillsCards(skillcards);
+        } catch (error) {
+            console.error('Error loading skill cards:', error);
+        }
+    }
+
+    // Музыкальные исполнители
+    async function fetchArtists() {
+        try {
+            const response = await fetch(`${API_BASE}/artists/p`);
+            const artists = await response.json();
+            renderArtists(artists);
+        } catch (error) {
+            console.error('Error loading artists:', error);
+        }
+    }
+
+    // Проекты
+    async function fetchProjects() {
+        try {
+            const response = await fetch(`${API_BASE}/projects/p`);
+            const projects = await response.json();
+            renderProjects(projects);
+        } catch (error) {
+            console.error('Error loading projects:', error);
+        }
+    }
+
+    // ===== Rendering Functions =====
+    function renderSkillsTags(skills) {
+        const container = document.getElementById('skills-tags-container');
+        container.innerHTML = '';
+        skills.forEach(skill => {
+            const el = document.createElement('span');
+            el.className = 'skill';
+            el.textContent = skill;
+            container.appendChild(el);
+        });
+    }
+
+    function renderSkillsCards(skillcards) {
+        const container = document.getElementById('skills-cards-container');
+        container.innerHTML = '';
+        skillcards.forEach(card => {
+            // Разбиваем строку технологий на массив
+            const techArray = card.technologies.split(',');
+            const techHTML = techArray.map(tech =>
+                `<span class="skill-tech-item">${tech.trim()}</span>`
+            ).join('');
+
+            const cardElement = document.createElement('div');
+            cardElement.className = 'skill-card';
+            cardElement.innerHTML = `
+                <h3 class="skill-card-title">${card.title}</h3>
+                <div class="skill-card-tech">${techHTML}</div>
+                <p class="skill-card-description">${card.description}</p>
+            `;
+            container.appendChild(cardElement);
+        });
+    }
+
+    function renderArtists(artists) {
+        const container = document.getElementById('artists-container');
+        container.innerHTML = '';
+        artists.forEach(artist => {
+            const card = document.createElement('div');
+            card.className = 'artist-card';
+            card.innerHTML = `
+                <div class="artist-icon">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <h3 class="artist-name">${artist.name}</h3>
+                <span class="artist-genre">${artist.genre}</span>
+                <p class="artist-quote">"${artist.quote}"</p>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function renderProjects(projects) {
+        const container = document.getElementById('projects-container');
+        container.innerHTML = '';
+        projects.forEach(project => {
+            const techArray = project.tech.split(',');
+            const techHTML = techArray.map(t => `<span class="tech-item">${t.trim()}</span>`).join('');
+
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.innerHTML = `
+                <h3 class="project-title">${project.title}</h3>
+                <div class="project-tech">${techHTML}</div>
+                <p class="project-description">${project.description}</p>
+                <a href="${project.link}" class="project-link" target="_blank">
+                    Посмотреть проект <i class="fas fa-external-link-alt"></i>
+                </a>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    // ===== Initialize Page =====
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchHero();
+        fetchAbout();
+        fetchSkillsTags();
+        fetchSkillsCards();
+        fetchArtists();
+        fetchProjects();
+        initGame();
+        initSmoothScrolling();
+        initScrollAnimations();
+    });
+
+    // ===== Tic Tac Toe Game Logic =====
+    function initGame() {
+        const gameBoardElement = document.getElementById('game-board');
+        const gameInfoElement = document.getElementById('game-info');
+        const gameMessageElement = document.getElementById('game-message');
+        const resetButtonElement = document.getElementById('reset-button');
         const cells = document.querySelectorAll('.cell');
 
-        let currentPlayer = 'X';
+        let currentPlayer = 'X'; // Игрок всегда X
         let gameActive = true;
         let gameState = ['', '', '', '', '', '', '', '', ''];
 
@@ -1027,41 +1145,46 @@
 
         // Player makes a move
         function handleCellClick(e) {
+            if (!gameActive || currentPlayer !== 'X') return;
             const cell = e.target;
             const index = parseInt(cell.getAttribute('data-index'));
 
-            // Check if cell is empty and game is active
-            if (gameState[index] !== '' || !gameActive) return;
+            // Проверяем, что ячейка пуста и это ход игрока (X)
+            if (gameState[index] !== '') return;
 
             // Make player move
-            makeMove(index, currentPlayer);
-
-            // Bot makes move
-            if (gameActive) {
-                setTimeout(makeBotMove, 500);
-            }
+            makeMove(index, 'X');
         }
 
         // Make a move
         function makeMove(index, player) {
+            // Update game state
             gameState[index] = player;
+
+            // Update UI
             cells[index].classList.add(player.toLowerCase());
+            cells[index].textContent = player;
 
             // Check for win or draw
             const win = checkWin();
             const draw = checkDraw();
 
             if (win) {
-                endGame(false);
-                gameMessage.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Я выиграл! 😎';
+                endGame();
+                gameMessageElement.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Не баг, а фича! 😎';
+                return;
             } else if (draw) {
-                endGame(false);
-                gameMessage.textContent = 'Ничья! 🤝';
-            } else {
-                // Switch player
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                gameInfo.textContent = currentPlayer === 'X' ? 'Твой ход!' : 'Мой ход...';
+                endGame();
+                gameMessageElement.textContent = 'Ничья! 🤝';
+                return;
             }
+
+            // Switch player to bot
+            currentPlayer = 'O';
+            gameInfoElement.textContent = 'Мой ход...';
+
+            // Bot makes move after a short delay
+            setTimeout(makeBotMove, 500);
         }
 
         // Bot makes a move
@@ -1071,21 +1194,15 @@
             // Find best move
             let bestMove = findBestMove();
 
-            // If no best move, choose random
-            if (bestMove === -1) {
-                let emptyCells = gameState.map((cell, index) => cell === '' ? index : null).filter(index => index !== null);
-                if (emptyCells.length > 0) {
-                    bestMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                }
-            }
-
             // Make move
-            if (bestMove !== -1) {
-                makeMove(bestMove, 'O');
-            }
+            makeMove(bestMove, 'O');
+
+            // Switch back to player after bot move
+            currentPlayer = 'X';
+            gameInfoElement.textContent = 'Твой ход!';
         }
 
-        // Find best move (advanced AI)
+        // Find best move (AI logic)
         function findBestMove() {
             // 1. Try to win
             for (let condition of winConditions) {
@@ -1151,30 +1268,41 @@
             currentPlayer = 'X';
             gameActive = true;
             gameState = ['', '', '', '', '', '', '', '', ''];
-            gameInfo.textContent = 'Твой ход! Кликай на ячейку';
-            gameMessage.textContent = '';
+            gameInfoElement.textContent = 'Твой ход! Кликай на ячейку';
+            gameMessageElement.textContent = '';
 
             // Clear cells
             cells.forEach(cell => {
                 cell.classList.remove('x', 'o');
+                cell.textContent = '';
             });
         }
 
         // Event listeners
-        cells.forEach(cell => cell.addEventListener('click', handleCellClick));
-        resetButton.addEventListener('click', resetGame);
+        cells.forEach(cell => {
+            cell.addEventListener('click', handleCellClick);
+        });
 
-        // Плавная прокрутка
+        resetButtonElement.addEventListener('click', resetGame);
+    }
+
+    // Плавная прокрутка
+    function initSmoothScrolling() {
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
             });
         });
+    }
 
-        // Анимация при скролле
+    // Анимация при скролле
+    function initScrollAnimations() {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -1184,12 +1312,13 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('section, .project-card, .artist-card').forEach(el => {
+        document.querySelectorAll('section, .project-card, .artist-card, .skill-card').forEach(el => {
             el.style.opacity = 0;
             el.style.transform = 'translateY(30px)';
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
             observer.observe(el);
         });
+    }
     </script>
 </body>
 </html>

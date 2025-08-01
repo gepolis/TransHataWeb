@@ -614,6 +614,7 @@
             color: var(--text);
             transition: var(--transition);
             border: 1px solid var(--border);
+            text-decoration: none;
         }
 
         .social-link:hover {
@@ -736,6 +737,7 @@
                 max-width: 280px;
             }
         }
+
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
@@ -780,6 +782,7 @@
                     <h3>Мой путь в IT</h3>
                     <p>Я начал свой путь в программировании несколько лет назад, и с тех пор постоянно совершенствую свои навыки. Мне нравится создавать продукты, которые решают реальные проблемы и приносят пользу людям.</p>
                     <p>В свободное время я изучаю новые технологии, экспериментирую с различными стеками и участвую в open-source проектах. Мой подход к работе сочетает техническую экспертизу с творческим мышлением.</p>
+                    <p>Я верю, что каждый человек имеет право быть собой и выражать свою идентичность без страха и ограничений. Моя цель - создавать инклюзивные решения, которые учитывают разнообразие человеческого опыта.</p>
                     <div class="skills">
                         <span class="skill">Flask</span>
                         <span class="skill">Django</span>
@@ -795,7 +798,7 @@
                 <div class="about-image">
                     <div class="about-image-content">
                         <h3>TransHata</h3>
-                        <p>"Программирование - это искусство решения задач, а музыка - источник вдохновения"</p>
+                        <p>"Мой путь - это постоянное становление и поиск гармонии между внутренним и внешним. Я верю в свободу самовыражения во всех ее формах."</p>
                     </div>
                 </div>
             </div>
@@ -841,39 +844,8 @@
     <section id="music" class="music-section section">
         <div class="container">
             <h2 class="section-title">Музыкальные предпочтения</h2>
-            <div class="artists-grid">
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">Алёна Швец</h3>
-                    <span class="artist-genre">Поп • Альтернатива</span>
-                    <p class="artist-quote">"Искренние тексты и эмоциональная подача"</p>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">Ваня Дмитриенко</h3>
-                    <span class="artist-genre">Поп • R&B</span>
-                    <p class="artist-quote">"Чувственные композиции и глубокие тексты"</p>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">Дора</h3>
-                    <span class="artist-genre">Поп • Электроника</span>
-                    <p class="artist-quote">"Энергичные биты и современное звучание"</p>
-                </div>
-                <div class="artist-card">
-                    <div class="artist-icon">
-                        <i class="fas fa-microphone-alt"></i>
-                    </div>
-                    <h3 class="artist-name">NЮ</h3>
-                    <span class="artist-genre">Поп • Инди</span>
-                    <p class="artist-quote">"Смелые эксперименты и необычные аранжировки"</p>
-                </div>
+            <div class="artists-grid" id="artists-container">
+
             </div>
         </div>
     </section>
@@ -1007,201 +979,252 @@
     </footer>
 
     <script>
-        // ===== Tic Tac Toe Game Logic =====
-        const gameBoardElement = document.getElementById('game-board');
-        const gameInfoElement = document.getElementById('game-info');
-        const gameMessageElement = document.getElementById('game-message');
-        const resetButtonElement = document.getElementById('reset-button');
-        const cells = document.querySelectorAll('.cell');
+    // ===== Tic Tac Toe Game Logic =====
+// ===== Tic Tac Toe Game Logic =====
+const gameBoardElement = document.getElementById('game-board');
+const gameInfoElement = document.getElementById('game-info');
+const gameMessageElement = document.getElementById('game-message');
+const resetButtonElement = document.getElementById('reset-button');
+const cells = document.querySelectorAll('.cell');
 
-        let currentPlayer = 'X';
-        let gameActive = true;
-        let gameState = ['', '', '', '', '', '', '', '', ''];
+let currentPlayer = 'X'; // Игрок всегда X
+let gameActive = true;
+let gameState = ['', '', '', '', '', '', '', '', ''];
 
-        // Winning conditions
-        const winConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8],
-            [0, 3, 6], [1, 4, 7], [2, 5, 8],
-            [0, 4, 8], [2, 4, 6]
-        ];
+// Winning conditions
+const winConditions = [
+    [0, 1, 2], [3, 4, 5], [6, 7, 8],
+    [0, 3, 6], [1, 4, 7], [2, 5, 8],
+    [0, 4, 8], [2, 4, 6]
+];
 
-        // Player makes a move
-        function handleCellClick(e) {
-            const cell = e.target;
-            const index = parseInt(cell.getAttribute('data-index'));
+// Player makes a move
+function handleCellClick(e) {
+    if (!gameActive || currentPlayer !== 'X') return;
+    const cell = e.target;
+    const index = parseInt(cell.getAttribute('data-index'));
 
-            // Check if cell is empty and game is active
-            if (gameState[index] !== '' || !gameActive) return;
+    // Проверяем, что ячейка пуста и это ход игрока (X)
+    if (gameState[index] !== '') return;
 
-            // Make player move
-            makeMove(index, currentPlayer);
+    // Make player move
+    makeMove(index, 'X');
+}
 
-            // Check if game is still active
-            if (gameActive) {
-                // Bot makes move after a short delay
-                setTimeout(makeBotMove, 500);
-            }
+// Make a move
+function makeMove(index, player) {
+    // Update game state
+    gameState[index] = player;
+
+    // Update UI
+    cells[index].classList.add(player.toLowerCase());
+    cells[index].textContent = player;
+
+    // Check for win or draw
+    const win = checkWin();
+    const draw = checkDraw();
+
+    if (win) {
+        endGame();
+        gameMessageElement.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Не баг, а фича! 😎';
+        return;
+    } else if (draw) {
+        endGame();
+        gameMessageElement.textContent = 'Ничья! 🤝';
+        return;
+    }
+
+    // Switch player to bot
+    currentPlayer = 'O';
+    gameInfoElement.textContent = 'Мой ход...';
+
+    // Bot makes move after a short delay
+    setTimeout(makeBotMove, 500);
+}
+
+// Bot makes a move
+function makeBotMove() {
+    if (!gameActive) return;
+
+    // Find best move
+    let bestMove = findBestMove();
+
+    // Make move
+    console.log("0")
+    makeMove(bestMove, 'O');
+
+    // Switch back to player after bot move
+    currentPlayer = 'X';
+    gameInfoElement.textContent = 'Твой ход!';
+}
+
+// Find best move (AI logic)
+function findBestMove() {
+    // 1. Try to win
+    for (let condition of winConditions) {
+        const [a, b, c] = condition;
+        if (gameState[a] === 'O' && gameState[b] === 'O' && gameState[c] === '') return c;
+        if (gameState[a] === 'O' && gameState[c] === 'O' && gameState[b] === '') return b;
+        if (gameState[b] === 'O' && gameState[c] === 'O' && gameState[a] === '') return a;
+    }
+
+    // 2. Block player win
+    for (let condition of winConditions) {
+        const [a, b, c] = condition;
+        if (gameState[a] === 'X' && gameState[b] === 'X' && gameState[c] === '') return c;
+        if (gameState[a] === 'X' && gameState[c] === 'X' && gameState[b] === '') return b;
+        if (gameState[b] === 'X' && gameState[c] === 'X' && gameState[a] === '') return a;
+    }
+
+    // 3. Take center
+    if (gameState[4] === '') return 4;
+
+    // 4. Take empty corner
+    const cornerList = [0, 2, 6, 8];
+    const emptyCorners = cornerList.filter(index => gameState[index] === '');
+    if (emptyCorners.length > 0) {
+        return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
+    }
+
+    // 5. Take empty side
+    const sides = [1, 3, 5, 7];
+    const emptySides = sides.filter(index => gameState[index] === '');
+    if (emptySides.length > 0) {
+        return emptySides[Math.floor(Math.random() * emptySides.length)];
+    }
+
+    return -1;
+}
+
+// Check for win
+function checkWin() {
+    for (let condition of winConditions) {
+        const [a, b, c] = condition;
+        if (gameState[a] !== '' &&
+            gameState[a] === gameState[b] &&
+            gameState[a] === gameState[c]) {
+            return true;
         }
+    }
+    return false;
+}
 
-        // Make a move
-        function makeMove(index, player) {
-            // Update game state
-            gameState[index] = player;
+// Check for draw
+function checkDraw() {
+    return !gameState.includes('');
+}
 
-            // Update UI
-            cells[index].classList.add(player.toLowerCase());
-            cells[index].textContent = player;
+// End the game
+function endGame() {
+    gameActive = false;
+}
 
-            // Check for win or draw
-            const win = checkWin();
-            const draw = checkDraw();
+// Reset the game
+function resetGame() {
+    currentPlayer = 'X';
+    gameActive = true;
+    gameState = ['', '', '', '', '', '', '', '', ''];
+    gameInfoElement.textContent = 'Твой ход! Кликай на ячейку';
+    gameMessageElement.textContent = '';
 
-            if (win) {
-                endGame();
-                gameMessageElement.textContent = player === 'X' ? 'Ты победил! 🎉' : 'Я выиграл! 😎';
-            } else if (draw) {
-                endGame();
-                gameMessageElement.textContent = 'Ничья! 🤝';
-            } else {
-                // Switch player
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                gameInfoElement.textContent = currentPlayer === 'X' ? 'Твой ход!' : 'Мой ход...';
-            }
-        }
+    // Clear cells
+    cells.forEach(cell => {
+        cell.classList.remove('x', 'o');
+        cell.textContent = '';
+    });
+}
 
-        // Bot makes a move
-        function makeBotMove() {
-            if (!gameActive) return;
+// Event listeners
+cells.forEach(cell => {
+    cell.addEventListener('click', handleCellClick);
+});
 
-            // Find best move
-            let bestMove = findBestMove();
+resetButtonElement.addEventListener('click', resetGame);
 
-            // If no best move, choose random
-            if (bestMove === -1) {
-                let emptyCells = gameState
-                    .map((cell, index) => cell === '' ? index : null)
-                    .filter(index => index !== null);
-
-                if (emptyCells.length > 0) {
-                    bestMove = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                }
-            }
-
-            // Make move
-            if (bestMove !== -1) {
-                makeMove(bestMove, 'O');
-            }
-        }
-
-        // Find best move (AI logic)
-        function findBestMove() {
-            // 1. Try to win
-            for (let condition of winConditions) {
-                const [a, b, c] = condition;
-                if (gameState[a] === 'O' && gameState[b] === 'O' && gameState[c] === '') return c;
-                if (gameState[a] === 'O' && gameState[c] === 'O' && gameState[b] === '') return b;
-                if (gameState[b] === 'O' && gameState[c] === 'O' && gameState[a] === '') return a;
-            }
-
-            // 2. Block player win
-            for (let condition of winConditions) {
-                const [a, b, c] = condition;
-                if (gameState[a] === 'X' && gameState[b] === 'X' && gameState[c] === '') return c;
-                if (gameState[a] === 'X' && gameState[c] === 'X' && gameState[b] === '') return b;
-                if (gameState[b] === 'X' && gameState[c] === 'X' && gameState[a] === '') return a;
-            }
-
-            // 3. Take center
-            if (gameState[4] === '') return 4;
-
-            // 4. Take empty corner
-            const cornerList = [0, 2, 6, 8];
-            const emptyCorners = cornerList.filter(index => gameState[index] === '');
-            if (emptyCorners.length > 0) {
-                return emptyCorners[Math.floor(Math.random() * emptyCorners.length)];
-            }
-
-            // 5. Take empty side
-            const sides = [1, 3, 5, 7];
-            const emptySides = sides.filter(index => gameState[index] === '');
-            if (emptySides.length > 0) {
-                return emptySides[Math.floor(Math.random() * emptySides.length)];
-            }
-
-            return -1;
-        }
-
-        // Check for win
-        function checkWin() {
-            for (let condition of winConditions) {
-                const [a, b, c] = condition;
-                if (gameState[a] !== '' &&
-                    gameState[a] === gameState[b] &&
-                    gameState[a] === gameState[c]) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        // Check for draw
-        function checkDraw() {
-            return !gameState.includes('');
-        }
-
-        // End the game
-        function endGame() {
-            gameActive = false;
-        }
-
-        // Reset the game
-        function resetGame() {
-            currentPlayer = 'X';
-            gameActive = true;
-            gameState = ['', '', '', '', '', '', '', '', ''];
-            gameInfoElement.textContent = 'Твой ход! Кликай на ячейку';
-            gameMessageElement.textContent = '';
-
-            // Clear cells
-            cells.forEach(cell => {
-                cell.classList.remove('x', 'o');
-                cell.textContent = '';
-            });
-        }
-
-        // Event listeners
-        cells.forEach(cell => {
-            cell.addEventListener('click', handleCellClick);
-        });
-
-        resetButtonElement.addEventListener('click', resetGame);
-
-        // Плавная прокрутка
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+    // Плавная прокрутка
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
             });
         });
+    });
 
-        // Анимация при скролле
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = 1;
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('section, .project-card, .artist-card').forEach(el => {
-            el.style.opacity = 0;
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-            observer.observe(el);
+    // Анимация при скролле
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = 1;
+                entry.target.style.transform = 'translateY(0)';
+            }
         });
-    </script>
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('section, .project-card, .artist-card').forEach(el => {
+        el.style.opacity = 0;
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+
+            async function fetchArtists() {
+        try {
+            const response = await fetch('/api/artists');
+            const artists = await response.json();
+            renderArtists(artists);
+        } catch (error) {
+            console.error('Error loading artists:', error);
+            // Fallback to static content if API fails
+            renderArtists([
+                {
+                    name: "Алёна Швец",
+                    genre: "Поп • Альтернатива",
+                    quote: "Искренние тексты и эмоциональная подача"
+                },
+                {
+                    name: "Ваня Дмитриенко",
+                    genre: "Поп • R&B",
+                    quote: "Чувственные композиции и глубокие тексты"
+                },
+                {
+                    name: "Дора",
+                    genre: "Поп • Электроника",
+                    quote: "Энергичные биты и современное звучание"
+                },
+                {
+                    name: "NЮ",
+                    genre: "Поп • Инди",
+                    quote: "Смелые эксперименты и необычные аранжировки"
+                }
+            ]);
+        }
+    }
+
+    function renderArtists(artists) {
+        const container = document.getElementById('artists-container');
+        container.innerHTML = '';
+
+        artists.forEach(artist => {
+            const card = document.createElement('div');
+            card.className = 'artist-card';
+            card.innerHTML = `
+                <div class="artist-icon">
+                    <i class="fas fa-microphone-alt"></i>
+                </div>
+                <h3 class="artist-name">${artist.name}</h3>
+                <span class="artist-genre">${artist.genre}</span>
+                <p class="artist-quote">"${artist.quote}"</p>
+            `;
+            container.appendChild(card);
+
+            // Добавляем карточку в observer для анимации
+            observer.observe(card);
+        });
+    }
+
+    // Вызываем функцию при загрузке страницы
+    fetchArtists();
+</script>
 </body>
 </html>
